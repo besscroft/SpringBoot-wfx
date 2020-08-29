@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace = 所需实现的接口全限定名-->
+<mapper namespace="com.bess.springboot.wfx.dao.MemeberDAO">
+    <resultMap id="memeberMap" type="Memeber">
+        <id column="mid" property="mid"/>
+        <result column="memeber_id" property="memeberId"/>
+        <result column="account" property="account"/>
+        <result column="qq_num" property="qqNum"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="recom_user" property="recomUser"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="pay_account" property="payAccount"/>
+        <result column="name" property="name"/>
+        <result column="password" property="password"/>
+        <result column="visit_code" property="visitCode"/>
+        <result column="use_recom" property="useRecom"/>
+        <result column="level_code" property="levelCode"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <!--    public Memeber getMemeber(@Param("account") String account,
+        @Param("password") String password);-->
+    <select id="getMemeber" resultMap="memeberMap">
+        select mid,memeber_id,account,qq_num,email,phone,recom_user,register_time,pay_account,name,password,visit_code,use_recom,level_code,update_time
+        from wxb_memeber
+        where account = #{account} and password = #{password}
+    </select>
+</mapper>

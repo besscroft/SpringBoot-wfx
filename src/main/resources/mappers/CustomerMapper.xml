@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace = 所需实现的接口全限定名-->
+<mapper namespace="com.bess.springboot.wfx.dao.CustomerDAO">
+    <resultMap id="customerMap" type="Customer">
+        <id column="customer_id" property="customerId"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="QQ" property="qq"/>
+        <result column="wxh" property="wxh"/>
+        <result column="phone" property="phone"/>
+        <result column="createtime" property="createTime"/>
+        <result column="login_name" property="loginName"/>
+        <result column="login_pwd" property="loginPwd"/>
+        <result column="state" property="state"/>
+        <result column="level" property="level"/>
+        <result column="acc_balance" property="accBalance"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="website" property="website"/>
+    </resultMap>
+<!--    public Customer getCustomer(@Param("loginName") String loginName,
+        @Param("loginPwd") String loginPwd);-->
+    <select id="getCustomer" resultMap="customerMap">
+        select customer_id,customer_name,QQ,wxh,phone,createtime,login_name,login_pwd,state,level,acc_balance,update_time,website
+        from wxb_customer
+        where login_name = #{loginName} and login_pwd = #{loginPwd}
+    </select>
+</mapper>

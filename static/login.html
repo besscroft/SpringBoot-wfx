@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>商户系统登录</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
+		<style type="text/css">
+			*{
+				margin: 0;
+			}
+			.mybody{
+				margin-top: 1.625rem;
+			}
+			body{
+				background-image: url(assets/img/background.jpg);
+				z-index: -1;
+				background-size:cover;
+				background-repeat:no-repeat;
+				background-attachment:fixed;
+				background-position:center;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div id="container">
+			<el-row>
+				<el-col :span="24">
+					<div class="grid-content bg-purple-dark">
+						
+						<el-menu
+						  :default-active="activeIndex2"
+						  class="el-menu-demo"
+						  mode="horizontal"
+						  @select="handleSelect"
+						  background-color="#545c64"
+						  text-color="#fff"
+						  active-text-color="#ffd04b">
+							<el-menu-item index="1">微分销管理平台</el-menu-item>
+							<el-menu-item index="2" href="#">商户系统</el-menu-item>
+							<el-menu-item index="3" href="#">自媒体系统</el-menu-item>
+							<el-menu-item index="4">平台管理系统</el-menu-item>
+						</el-menu>
+						
+					</div>
+				</el-col>
+			</el-row>
+			<el-row class="mybody">
+				<el-col :span="16">
+					<div class="grid-content bg-purple">
+						&nbsp;
+					</div>
+				</el-col>
+				<el-col :span="6">
+					<div class="grid-content bg-purple-light">
+						
+						<el-card class="box-card">
+							<div slot="header" class="clearfix">
+							    <span>商户系统登录</span>
+							</div>
+							<div class="text item">
+							    <el-form label-width="100px" class="demo-ruleForm">
+									<el-form-item label="登录选择">
+										<el-radio-group v-model="type">
+											<el-radio label="商户系统" value="0"></el-radio>
+											<el-radio label="自媒体系统" value="1"></el-radio>
+										</el-radio-group>
+									</el-form-item>
+									<el-form-item label="账号">
+									    <el-input v-model="username"></el-input>
+									</el-form-item>
+									<el-form-item label="密码">
+									    <el-input v-model="password" type="password"></el-input>
+									</el-form-item>
+									<el-form-item>
+									    <el-button type="primary" @click="submitForm" :plain="true">登录</el-button>
+									</el-form-item>
+								</el-form>
+							</div>
+						</el-card>
+					</div>
+				</el-col>
+				<el-col :span="2">
+					<div class="grid-content bg-purple">
+						&nbsp;
+					</div>
+				</el-col>
+			</el-row>
+		</div>
+		
+	</body>
+	<script src="assets/js/vue.js"></script>
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:"#container",
+			data:{
+				username: '',
+				password: '',
+				type: ''
+			},
+			methods: {
+			    submitForm() {
+					console.log(vm.type);
+					console.log(vm.username);
+					console.log(vm.password);
+					if(vm.type == "商户系统") {
+						axios({
+						  method: 'post',
+						  url: 'http://localhost:8080/customer/login',
+						  params: {
+						    username: vm.username,
+						    password: vm.password
+						  }
+						})
+						.then(function(res){
+							console.log(res);
+							if(res.data.code == 0){
+								var token = res.data.data;
+								document.cookie = "token="+token;
+								vm.$message('登录成功');
+								location.href="home.html";
+							}else{
+								vm.$message('登录失败，请检查用户名或密码');
+							}
+						});
+					} else {
+						axios({
+						  method: 'post',
+						  url: 'http://localhost:8080/memeber/login',
+						  params: {
+						    username: vm.username,
+						    password: vm.password
+						  }
+						})
+						.then(function(res){
+							console.log(res);
+							if(res.data.code == 0){
+								var token = res.data.data;
+								document.cookie = "token="+token;
+								vm.$message('登录成功');
+								location.href="home.html";
+							}else{
+								vm.$message('登录失败，请检查用户名或密码');
+							}
+						});
+					}
+			    }
+			}
+		});
+	</script>
+</html>
