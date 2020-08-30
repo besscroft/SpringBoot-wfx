@@ -20,15 +20,147 @@
 				background-attachment:fixed;
 				background-position:center;
 			}
+			.el-carousel__item h3 {
+			    color: #475669;
+			    font-size: 18px;
+			    opacity: 0.75;
+			    line-height: 300px;
+			    margin: 0;
+			}
+			  
+			.el-carousel__item:nth-child(2n) {
+			    background-color: #99a9bf;
+			}
+			  
+			.el-carousel__item:nth-child(2n+1) {
+			    background-color: #d3dce6;
+			}
+			.myelrow{
+				margin-top: 1.625rem;
+			}
 		</style>
 	</head>
 	<body>
 		
-		
+		<div id="container">
+			<el-row>
+				<el-col :span="24">
+					<div class="grid-content bg-purple-dark">
+						
+						<el-menu
+						  :default-active="activeIndex2"
+						  class="el-menu-demo"
+						  mode="horizontal"
+						  @select="handleSelect"
+						  background-color="#409EFF"
+						  text-color="#fff"
+						  active-text-color="#ffd04b">
+							<el-menu-item index="1">微分销管理平台</el-menu-item>
+							<el-menu-item index="2" href="#">商户系统</el-menu-item>
+							<el-menu-item index="3" href="#">自媒体系统</el-menu-item>
+							<el-menu-item index="4">平台管理系统</el-menu-item>
+						</el-menu>
+						
+					</div>
+				</el-col>
+			</el-row>
+			<el-row class="myelrow">
+				<el-col :span="9">
+					&nbsp;
+				</el-col>
+				<el-col :span="6">
+					<h1 style="color: #FFFFFF;">欢迎光临微分销管理平台</h1>
+				</el-col>
+				<el-col :span="9">
+					&nbsp;
+				</el-col>
+			</el-row>
+			<el-row class="myelrow">
+				<el-col :span="2"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+				<el-col :span="6">
+					<div class="grid-content bg-purple-light">
+						<el-card class="box-card">
+							<div class="text item">
+								<h3>一手货源 分成高</h3>
+								与厂商长期合作，直接发货，平均分成超60%，省去中间环节
+							</div>
+						</el-card>
+					</div>
+				</el-col>
+				<el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+				<el-col :span="6">
+					<div class="grid-content bg-purple-light">
+						<el-card class="box-card">
+							<div class="text item">
+								<h3>一件代发 结算快</h3>
+								买家下1单，厂商发1单，当天下单当天发出，结算周期短，结算快
+							</div>
+						</el-card>
+					</div>
+				</el-col>
+				<el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+				<el-col :span="6">
+					<div class="grid-content bg-purple-light">
+						<el-card class="box-card">
+							<div class="text item">
+								<h3>正品保证 签收高</h3>
+								商品通过国家检验标准，品质经过消费者认可，签收率达到90%
+							</div>
+						</el-card>
+					</div>
+				</el-col>
+				<el-col :span="2"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+			</el-row>
+			<el-row class="myelrow">
+				<el-col :span="2"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+				<el-col :span="6">
+					<div class="grid-content bg-purple-light">
+						<el-card class="box-card">
+							<div class="text item">
+								<h3>提供图文素材 无门槛</h3>
+								提供精美文案和图片，省去编辑素材的麻烦，您只需复制图文内容
+							</div>
+						</el-card>
+					</div>
+				</el-col>
+				<el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+				<el-col :span="6">
+					<div class="grid-content bg-purple-light">
+						<el-card class="box-card">
+							<div class="text item">
+								<h3>操作简便 赚钱快</h3>
+								您登录后选择合适的商品，复制并发出图文信息，然后就可以数钱了
+							</div>
+						</el-card>
+					</div>
+				</el-col>
+				<el-col :span="1"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+				<el-col :span="6">
+					<div class="grid-content bg-purple-light">
+						<el-card class="box-card">
+							<div class="text item">
+								<h3>专业客服 退换不愁</h3>
+								每件商品都有专业客服为买家服务，享受各大电商的优质客户服务
+							</div>
+						</el-card>
+					</div>
+				</el-col>
+				<el-col :span="2"><div class="grid-content bg-purple">&nbsp;</div></el-col>
+			</el-row>
+		</div>
 		
 	</body>
 	<script src="assets/js/vue.js"></script>
 	<!-- 引入组件库 -->
 	<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el: "#container",
+			data: {
+				
+			},
+			dangerouslyUseHTMLString: true
+		});
+	</script>
 </html>

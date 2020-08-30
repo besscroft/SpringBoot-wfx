@@ -5,6 +5,7 @@
 		<title>管理系统</title>
 		<!-- 引入样式 -->
 		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="assets/layui/css/layui.css" />
 		<style type="text/css">
 			*{
 				margin: 0;
@@ -20,14 +21,96 @@
 				background-attachment:fixed;
 				background-position:center;
 			}
+			#container{
+				width: 100%;
+			}
 		</style>
 	</head>
-	<body>
-		
-		
+	<body class="layui-layout-body">
+		<div id="container">
+			<div class="layui-layout layui-layout-admin">
+			    <div class="layui-header">
+			        <div class="layui-logo">微分销平台管理系统</div>
+			        <!-- 头部区域（可配合layui已有的水平导航） -->
+			        <ul class="layui-nav layui-layout-left">
+			            <li class="layui-nav-item"><a href="">管理系统</a></li>
+			            <li class="layui-nav-item"><a href="">商户系统</a></li>
+			            <li class="layui-nav-item"><a href="">自媒体系统</a></li>
+			        </ul>
+			        <ul class="layui-nav layui-layout-right">
+			            <li class="layui-nav-item">
+			                <a href="javascript:;">
+			                    <img src="https://www.52bess.com/uploads/avatar.png" class="layui-nav-img">
+								{{username}}
+			                </a>
+			                <dl class="layui-nav-child">
+			                    <dd><a href="">基本资料</a></dd>
+			                    <dd><a href="">安全设置</a></dd>
+			                </dl>
+			            </li>
+			            <li class="layui-nav-item"><a href="">退出</a></li>
+			        </ul>
+			    </div>
+			
+			    <div class="layui-side layui-bg-black">
+			        <div class="layui-side-scroll">
+			            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+			                <li class="layui-nav-item layui-nav-itemed">
+								<a class="" href="javascript:;">所有商品</a>
+								<dl class="layui-nav-child">
+									<dd><a href="javascript:;">列表一</a></dd>
+									<dd><a href="javascript:;">列表二</a></dd>
+									<dd><a href="javascript:;">列表三</a></dd>
+									<dd><a href="">超链接</a></dd>
+								</dl>
+							</li>
+							<li class="layui-nav-item">
+								<a href="javascript:;">解决方案</a>
+								<dl class="layui-nav-child">
+									<dd><a href="javascript:;">列表一</a></dd>
+									<dd><a href="javascript:;">列表二</a></dd>
+									<dd><a href="">超链接</a></dd>
+								</dl>
+							</li>
+							<li class="layui-nav-item"><a href="">云市场</a></li>
+							<li class="layui-nav-item"><a href="">发布商品</a></li>
+			            </ul>
+			        </div>
+			    </div>
+			
+			    <div class="layui-body">
+			        <!-- 内容主体区域 -->
+			        <iframe src="hello.jsp" name="main_self_frame" frameborder="0" class="layadmin-iframe" width="100%" style="height: 99.9%"></iframe>
+			    </div>
+			
+			    <div class="layui-footer">
+			        <!-- 底部固定区域 -->
+			        © BessCroft - 底部固定区域
+			    </div>
+			</div>
+		</div>
 	</body>
 	<script src="assets/js/vue.js"></script>
 	<!-- 引入组件库 -->
 	<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use('element', function(){
+		  var element = layui.element;
+		  
+		});
+		
+		var vm = new Vue({
+			el:"#container",
+			data:{
+				username:"admin"
+			},
+			methods:{
+				
+			}
+		});
+	</script>
 </html>
