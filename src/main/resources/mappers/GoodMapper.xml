@@ -73,4 +73,8 @@
         insert into wxb_good(good_id,good_name,customer_id,good_pic1,promote_desc,copy_ids,copy_desc,forward_link,order_no,type_id,tags,state,create_time,toped,recomed,toped_time,recomed_time,spc_id,zon_id,sell_num,website,kfqq)
         values(#{goodId},#{goodName},#{customerId},#{goodPic1},#{promoteDesc},#{copyIds},#{copyDesc},#{forwardLink},#{orderNo},#{goodType.typeId},#{tags},#{state},#{createTime},#{toped},#{recomed},#{topedTime},#{recomedTime},#{spcId},#{zonId},#{sellNum},#{website},#{kfqq})
     </insert>
+<!--    public int deleteGood(String goodId);   // 删除商品-->
+    <delete id="deleteGood">
+        delete from wxb_good where good_id = #{goodId}
+    </delete>
 </mapper>

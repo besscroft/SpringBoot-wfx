@@ -78,4 +78,21 @@ public class GoodController {
             return new ResultVO(1,"添加失败",null);
         }
     }
+
+    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)
+    @ApiOperation(value = "商品删除接口", notes = "根据提交的商品id进行商品的删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "goodId", value = "商品id", required = true, type = "String"),
+            @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
+    })
+    public ResultVO deleteGood(String goodId,@RequestHeader(required = true) String token){
+        Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);
+        boolean b = goodService.deleteGood(goodId);
+        System.out.println(b);
+        if (b) {
+            return new ResultVO(0,"删除成功",null);
+        } else {
+            return new ResultVO(1,"删除失败",null);
+        }
+    }
 }

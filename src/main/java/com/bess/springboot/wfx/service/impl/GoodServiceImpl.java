@@ -27,4 +27,9 @@ public class GoodServiceImpl implements GoodService {
     public boolean insertGood(Good good) {
         return goodDAO.insertGood(good) > 0;
     }
+
+    @Override
+    public boolean deleteGood(String goodId) {
+        return goodDAO.deleteGood(goodId) > 0;
+    }
 }

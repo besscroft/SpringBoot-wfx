@@ -12,4 +12,5 @@ import java.util.List;
 public interface GoodDAO {
     public List<Good> listGoodByCustomerId(@Param("customerId") String customerId,@Param("start") int start,@Param("size") int size);   // 根据商户id查询所有的商品信息
     public int insertGood(Good good);   // 添加商品
+    public int deleteGood(String goodId);   // 删除商品
 }

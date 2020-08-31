@@ -98,7 +98,7 @@
 					<el-table-column label="操作" fixed="right">
 						<template slot-scope="scope">
 							<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-							<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+							<el-button size="mini" type="danger" @click.native.prevent="handleDelete(scope.$index, tableData)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -170,9 +170,50 @@
 					console.log(index);
 					console.log(row);
 				},
-				handleDelete:function(index,row){
+				handleDelete:function(index,rows){
 					console.log(index);
-					console.log(row);
+					console.log(rows[index]);
+					vm.pagesize = event;
+					var tokenStr = "";
+					var str = document.cookie;
+					var arr = str.split(";");
+					for(var i=0;i<arr.length;i++){
+						var s = arr[i];
+						if(s.split("=")[0].trim() == "token"){
+							tokenStr = s.split("=")[1];
+							break;
+						}
+					}
+					
+					vm.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						axios({
+							method: 'delete',
+							url: 'http://localhost:8080/good/delete',
+							headers: {'token': tokenStr},
+							params: {
+								goodId:rows[index].goodId
+							}
+						}).then(function(res) {
+							console.log(res);
+							rows.splice(index, 1);
+							vm.$message({
+								type: 'success',
+								message: '删除成功!'
+							});
+						});
+					}).catch(() => {
+						vm.$message({
+							type: 'info',
+							message: '已取消删除'
+						});          
+					});
+					
+					
+			
 				},
 				handleSizeChange:function(event){
 					console.log(event);
