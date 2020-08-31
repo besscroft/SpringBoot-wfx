@@ -21,4 +21,9 @@ public class MemeberServiceImpl implements MemeberService {
     public Memeber login(String account, String password) {
         return memeberDAO.getMemeber(account,password);
     }
+
+    @Override
+    public Memeber getMemeberByLoginName(String account) {
+        return memeberDAO.getMemeberByLoginName(account);
+    }
 }

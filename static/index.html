@@ -147,6 +147,9 @@
 				</el-col>
 				<el-col :span="2"><div class="grid-content bg-purple">&nbsp;</div></el-col>
 			</el-row>
+			<el-row type="flex" justify="center" style="margin-top: 1.25rem;">
+				<el-button type="primary" class="grid-content bg-purple-light" @click="login">开始使用</el-button>
+			</el-row>
 		</div>
 		
 	</body>
@@ -160,7 +163,12 @@
 			data: {
 				
 			},
-			dangerouslyUseHTMLString: true
+			dangerouslyUseHTMLString: true,
+			methods:{
+				login:function(event){
+					location.href="login.html";
+				}
+			}
 		});
 	</script>
 </html>

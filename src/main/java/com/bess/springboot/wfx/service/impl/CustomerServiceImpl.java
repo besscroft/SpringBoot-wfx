@@ -21,4 +21,9 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer login(String loginName, String loginPwd) {
         return customerDAO.getCustomer(loginName,loginPwd);
     }
+
+    @Override
+    public Customer getCustomerByLoginName(String loginName) {
+        return customerDAO.getCustomerByLoginName(loginName);
+    }
 }

@@ -26,4 +26,24 @@
         from wxb_customer
         where login_name = #{loginName} and login_pwd = #{loginPwd}
     </select>
+    <resultMap id="customerMapInfo" type="Customer">
+        <id column="customer_id" property="customerId"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="QQ" property="qq"/>
+        <result column="wxh" property="wxh"/>
+        <result column="phone" property="phone"/>
+        <result column="createtime" property="createTime"/>
+        <result column="login_name" property="loginName"/>
+        <result column="state" property="state"/>
+        <result column="level" property="level"/>
+        <result column="acc_balance" property="accBalance"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="website" property="website"/>
+    </resultMap>
+<!--    public Customer getCustomerByLoginName(String loginName);   // 登录后根据JWT解码后的用户名查询用户信息（Customer对象）-->
+    <select id="getCustomerByLoginName" resultMap="customerMapInfo">
+        select customer_id,customer_name,QQ,wxh,phone,createtime,login_name,state,level,acc_balance,update_time,website
+        from wxb_customer
+        where login_name = #{loginName}
+    </select>
 </mapper>

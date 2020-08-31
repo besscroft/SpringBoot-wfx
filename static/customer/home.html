@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>商户系统</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+		<style type="text/css">
+			*{
+				margin: 0;
+			}
+			.mybody{
+				margin-top: 1.625rem;
+			}
+			body{
+				background-image: url(assets/img/background.jpg);
+				z-index: -1;
+				background-size:cover;
+				background-repeat:no-repeat;
+				background-attachment:fixed;
+				background-position:center;
+			}
+			#container{
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body class="layui-layout-body">
+		<div id="container">
+			<div class="layui-layout layui-layout-admin">
+			    <!--顶部导航栏组件-->
+				<myhead :title="headname" :username="username"></myhead>
+			
+				<!--左侧菜单栏组件-->
+			    <leftnav-cus></leftnav-cus>
+			
+			    <div class="layui-body">
+			        <!-- 内容主体区域 -->
+			        <iframe src="hello.jsp" name="main_self_frame" frameborder="0" class="layadmin-iframe" width="100%" style="height: 99.9%"></iframe>
+			    </div>
+			
+			    <div class="layui-footer">
+			        <!-- 底部固定区域 -->
+			        © BessCroft - 底部固定区域
+			    </div>
+			</div>
+		</div>
+	</body>
+	<script src="../assets/js/vue.js"></script>
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/layui/layui.js" charset="utf-8"></script>
+	<script src="../assets/js/head.js"></script>
+	<script src="../assets/js/customer.nav.js"></script>
+	<script type="text/javascript">
+		layui.use('element', function(){
+		  var element = layui.element;
+		  
+		});
+		
+		var vm = new Vue({
+			el:"#container",
+			data:{
+				headname:"商户管理系统",
+				username:"admin"
+			},
+			beforeMount:function(){
+				var tokenStr = "";
+				var str = document.cookie;
+				var arr = str.split(";");
+				for(var i=0;i<arr.length;i++){
+					var s = arr[i];
+					if(s.split("=")[0].trim() == "token"){
+						tokenStr = s.split("=")[1];
+						break;
+					}
+				}
+				console.log(tokenStr);
+				axios({
+					method: 'get',
+					url: 'http://localhost:8080/customer/info',
+					headers: {'token': tokenStr}
+				}).then(function(res) {
+					console.log(res.data.data.customerName);
+					vm.username = res.data.data.customerName;
+				});
+			},
+			methods:{
+				
+			}
+		});
+	</script>
+</html>

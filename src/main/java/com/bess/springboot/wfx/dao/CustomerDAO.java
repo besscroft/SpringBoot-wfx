@@ -10,4 +10,5 @@ import org.apache.ibatis.annotations.Param;
 public interface CustomerDAO {
     public Customer getCustomer(@Param("loginName") String loginName,
                                 @Param("loginPwd") String loginPwd); // 根据账号和密码，获取Customer对象
+    public Customer getCustomerByLoginName(String loginName);   // 登录后根据JWT解码后的用户名查询用户信息（Customer对象）
 }

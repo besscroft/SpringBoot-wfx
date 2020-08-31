@@ -24,7 +24,7 @@ public class SwaggerConfig {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())   //设置说明文档的“封面”信息
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.bess.springboot.demo2.controllers"))  //指定扫描接口的范围
+                .apis(RequestHandlerSelectors.basePackage("com.bess.springboot.wfx.controller"))  //指定扫描接口的范围
                 .paths(PathSelectors.any())
                 .build();
         return docket;

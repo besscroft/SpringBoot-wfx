@@ -28,4 +28,26 @@
         from wxb_memeber
         where account = #{account} and password = #{password}
     </select>
+    <resultMap id="memeberMapInfo" type="Memeber">
+        <id column="mid" property="mid"/>
+        <result column="memeber_id" property="memeberId"/>
+        <result column="account" property="account"/>
+        <result column="qq_num" property="qqNum"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="recom_user" property="recomUser"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="pay_account" property="payAccount"/>
+        <result column="name" property="name"/>
+        <result column="visit_code" property="visitCode"/>
+        <result column="use_recom" property="useRecom"/>
+        <result column="level_code" property="levelCode"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+<!--    public Memeber getMemeberByLoginName(String account);   // 登录后根据JWT解码后的用户名查询用户信息（Memeber对象）-->
+    <select id="getMemeberByLoginName" resultMap="memeberMapInfo">
+        select mid,memeber_id,account,qq_num,email,phone,recom_user,register_time,pay_account,name,visit_code,use_recom,level_code,update_time
+        from wxb_memeber
+        where account = #{account}
+    </select>
 </mapper>
