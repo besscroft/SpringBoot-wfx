@@ -78,13 +78,11 @@
 						break;
 					}
 				}
-				console.log(tokenStr);
 				axios({
 					method: 'get',
 					url: 'http://localhost:8080/memeber/info',
 					headers: {'token': tokenStr}
 				}).then(function(res) {
-					console.log(res.data.data.name);
 					vm.username = res.data.data.name;
 				});
 			},

@@ -42,7 +42,6 @@ public class JWTFilter implements Filter {
             try {
                 //判断请求的请求头是否带上 "Token"
                 if (request.getHeader("token") != null) {
-//                    System.out.println("传过来的token：" + request.getHeader("token"));
                     // 验证token
                     Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(request.getHeader("token"));
                     filterChain.doFilter(request,response);

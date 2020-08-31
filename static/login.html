@@ -114,9 +114,6 @@
 			},
 			methods: {
 			    submitForm() {
-					console.log(vm.type);
-					console.log(vm.username);
-					console.log(vm.password);
 					if(vm.type == "商户系统") {
 						axios({
 						  method: 'post',
@@ -127,7 +124,6 @@
 						  }
 						})
 						.then(function(res){
-							console.log(res);
 							if(res.data.code == 0){
 								var token = res.data.data;
 								document.cookie = "token="+token;
@@ -147,7 +143,6 @@
 						  }
 						})
 						.then(function(res){
-							console.log(res);
 							if(res.data.code == 0){
 								var token = res.data.data;
 								document.cookie = "token="+token;

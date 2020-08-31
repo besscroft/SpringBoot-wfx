@@ -1,6 +1,5 @@
 package com.bess.springboot.wfx.controller;
 
-import com.bess.springboot.wfx.pojo.Customer;
 import com.bess.springboot.wfx.pojo.Memeber;
 import com.bess.springboot.wfx.service.MemeberService;
 import com.bess.springboot.wfx.vo.ResultVO;

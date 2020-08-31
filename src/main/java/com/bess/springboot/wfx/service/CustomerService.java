@@ -1,7 +1,6 @@
 package com.bess.springboot.wfx.service;
 
 import com.bess.springboot.wfx.pojo.Customer;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @Author Bess Croft
