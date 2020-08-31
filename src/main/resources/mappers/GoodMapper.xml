@@ -77,4 +77,10 @@
     <delete id="deleteGood">
         delete from wxb_good where good_id = #{goodId}
     </delete>
+<!--    public int updateGood(Good good);   // 更新商品-->
+    <update id="updateGood">
+        update wxb_good
+        set good_name = #{goodName},good_pic1 = #{goodPic1},promote_desc = #{promoteDesc},copy_desc = #{copyDesc},forward_link = #{forwardLink},type_id = #{goodType.typeId},website = #{website},kfqq = #{kfqq}
+        where good_id = #{goodId}
+    </update>
 </mapper>

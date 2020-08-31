@@ -12,4 +12,5 @@ public interface GoodService {
     public List<Good> listGoodByCustomerId(String customerId, int start, int size);   // 根据商户id查询所有的商品信息
     public boolean insertGood(Good good);   // 添加商品
     public boolean deleteGood(String goodId);   // 删除商品
+    public boolean updateGood(Good good);   // 更新商品
 }

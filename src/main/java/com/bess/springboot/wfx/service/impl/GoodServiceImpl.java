@@ -32,4 +32,9 @@ public class GoodServiceImpl implements GoodService {
     public boolean deleteGood(String goodId) {
         return goodDAO.deleteGood(goodId) > 0;
     }
+
+    @Override
+    public boolean updateGood(Good good) {
+        return goodDAO.updateGood(good) > 0;
+    }
 }

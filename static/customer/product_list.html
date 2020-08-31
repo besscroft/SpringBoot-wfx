@@ -112,6 +112,54 @@
 					</el-pagination>
 				</div>
 			</template>
+			
+			<el-dialog
+				title="提示"
+				:visible.sync="dialogVisibleUpdate"
+				width="30%"
+				:before-close="handleClose">
+				<el-form label-width="80px">
+					<el-form-item label="商品名称">
+						<el-input v-model="updaterow.goodName"></el-input>
+					</el-form-item>
+					<el-form-item label="商品图片">
+						<el-input v-model="updaterow.goodPic1"></el-input>
+					</el-form-item>
+					<el-form-item label="推广说明">
+						<el-input v-model="updaterow.promoteDesc"></el-input>
+					</el-form-item>
+					<el-form-item label="文案说明">
+						<el-input v-model="updaterow.copyDesc"></el-input>
+					</el-form-item>
+					<el-form-item label="跳转链接">
+						<el-input v-model="updaterow.forwardLink"></el-input>
+					</el-form-item>
+					<el-form-item label="商品分类">
+						<el-select v-model="updaterow.typeId" placeholder="请选择活动区域">
+							<el-option label="保健品" value="01"></el-option>
+							<el-option label="饰品" value="02"></el-option>
+							<el-option label="护肤品" value="03"></el-option>
+							<el-option label="床上用品" value="04"></el-option>
+							<el-option label="生活用品" value="05"></el-option>
+							<el-option label="减肥产品" value="06"></el-option>
+							<el-option label="零食" value="07"></el-option>
+							<el-option label="数码产品" value="08"></el-option>
+							<el-option label="编程类书籍" value="09"></el-option>
+							<el-option label="家电" value="10"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="产品网址">
+						<el-input v-model="updaterow.website"></el-input>
+					</el-form-item>
+					<el-form-item label="客服QQ">
+						<el-input v-model="updaterow.kfqq"></el-input>
+					</el-form-item>
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="dialogVisibleUpdate = false">取 消</el-button>
+					<el-button type="primary" @click="updatesubmit">确 定</el-button>
+				</span>
+			</el-dialog>
 		</div>
 	</body>
 	<script src="../assets/js/vue.js"></script>
@@ -129,13 +177,17 @@
 				size: 1,
 				pagesize: 20,
 				dialogVisible: false,
-				goodName:"Java从入门到成神",
-				goodPic1:"https://www.52bess.com/uploads/avatar.png",
-				promoteDesc:"买买买！！！",
-				copyDesc:"买到就是赚到",
-				forwardLink:"baidu.com",
+				dialogVisibleUpdate: false,
+				updateindex:0,
+				updaterow:[]
+				,
+				goodName:"",
+				goodPic1:"",
+				promoteDesc:"",
+				copyDesc:"",
+				forwardLink:"",
 				typeId:01,
-				website:"baidu.com",
+				website:"",
 				kfqq:88888888
 			},
 			beforeMount:function(res){
@@ -162,13 +214,14 @@
 					console.log(res.data.data);
 					// console.log(res.data.data.length);
 					vm.tableData = res.data.data;
-					// vm.total = res.data.data.length;
+					vm.total = res.data.data.length;
 				});
 			},
 			methods:{
 				handleEdit:function(index,row){
-					console.log(index);
-					console.log(row);
+					vm.dialogVisibleUpdate = true;
+					vm.updateindex = index;
+					vm.updaterow = row;
 				},
 				handleDelete:function(index,rows){
 					console.log(index);
@@ -184,7 +237,6 @@
 							break;
 						}
 					}
-					
 					vm.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -211,9 +263,6 @@
 							message: '已取消删除'
 						});          
 					});
-					
-					
-			
 				},
 				handleSizeChange:function(event){
 					console.log(event);
@@ -309,6 +358,41 @@
 					            done();
 					          })
 					          .catch(_ => {});
+				},
+				updatesubmit:function(event){
+					vm.dialogVisible = false;
+					var tokenStr = "";
+					var str = document.cookie;
+					var arr = str.split(";");
+					for(var i=0;i<arr.length;i++){
+						var s = arr[i];
+						if(s.split("=")[0].trim() == "token"){
+							tokenStr = s.split("=")[1];
+							break;
+						}
+					}
+					axios({
+						method: 'post',
+						url: 'http://localhost:8080/good/update',
+						headers: {'token': tokenStr},
+						params: {
+							goodId:vm.updaterow.goodId,
+							goodName:vm.updaterow.goodName,
+							goodPic1:vm.updaterow.goodPic1,
+							promoteDesc:vm.updaterow.promoteDesc,
+							copyDesc:vm.updaterow.copyDesc,
+							forwardLink:vm.updaterow.forwardLink,
+							typeId:vm.updaterow.typeId,
+							website:vm.updaterow.website,
+							kfqq:vm.updaterow.kfqq
+						}
+					}).then(function(res) {
+						console.log(res);
+						if(res){
+							vm.$message('更新成功');
+							location.href = "product_list.html";
+						}
+					});
 				}
 			}
 		});
