@@ -55,6 +55,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/info",method = RequestMethod.GET)
     @ApiOperation(value = "用户信息查询接口", notes = "用户登录后进行个人信息查询的接口（不返回密码等敏感信息）")
+    @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     public ResultVO getInfo(@RequestHeader(required = true) String token){
         // 验证token
         Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="../assets/element-ui/index.css">
+		<link rel="stylesheet" href="../assets/layui/css/layui.css" />
+	</head>
+	<body>
+		<div id="container">
+			<template>
+				<el-table :data="tableData" height="250" border style="width: 100%">
+					<el-table-column prop="goodName" label="商品名称" width="180"></el-table-column>
+					<el-table-column prop="goodPic1" label="商品图片" width="80">
+						<template slot-scope="scope">
+							<img :src="scope.row.goodPic1" class="image" style="width: 3.125rem;height: 3.125rem;" />
+						</template>
+					</el-table-column>
+					<el-table-column prop="promoteDesc" label="推广说明"></el-table-column>
+					<el-table-column prop="copyDesc" label="文案说明"></el-table-column>
+					<el-table-column prop="forwardLink" label="跳转链接"></el-table-column>
+					<el-table-column prop="goodType.typeName" label="商品分类"></el-table-column>
+					<el-table-column label="是否有效">
+						<template slot-scope="scope">
+							<p v-if="scope.row.state=='0'">待审核</p>
+							<p v-if="scope.row.state=='1'">已上架</p>
+							<p v-if="scope.row.state=='2'">已下架</p>
+						</template>
+					</el-table-column>
+					<el-table-column label="是否置顶">
+						<template slot-scope="scope">
+							<p v-if="scope.row.toped=='0'">未置顶</p>
+							<p v-if="scope.row.toped=='1'">置顶</p>
+						</template>
+					</el-table-column>
+					<el-table-column label="是否推荐">
+						<template slot-scope="scope">
+							<p v-if="scope.row.recomed=='0'">否</p>
+							<p v-if="scope.row.recomed=='1'">是</p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="sellNum" label="作弊值"></el-table-column>
+					<el-table-column prop="website" label="产品网址"></el-table-column>
+					<el-table-column prop="kfqq" label="客服QQ"></el-table-column>
+					<el-table-column label="操作" fixed="right">
+						<template slot-scope="scope">
+							<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+							<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</template>
+		</div>
+	</body>
+	<script src="../assets/js/vue.js"></script>
+	<!-- 引入组件库 -->
+	<script src="../assets/element-ui/index.js"></script>
+	<script src="../assets/axios/axios.min.js"></script>
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:"#container",
+			data:{
+				tableData:[]
+			},
+			beforeMount:function(res){
+				var tokenStr = "";
+				var str = document.cookie;
+				var arr = str.split(";");
+				for(var i=0;i<arr.length;i++){
+					var s = arr[i];
+					if(s.split("=")[0].trim() == "token"){
+						tokenStr = s.split("=")[1];
+						break;
+					}
+				}
+				console.log(tokenStr);
+				axios({
+					method: 'get',
+					url: 'http://localhost:8080/good/listById',
+					headers: {'token': tokenStr}
+				}).then(function(res) {
+					console.log(res.data.data);
+					vm.tableData = res.data.data;
+				});
+			},
+			methods:{
+				handleEdit:function(index,row){
+					console.log(index);
+					console.log(row);
+				},
+				handleDelete:function(index,row){
+					console.log(index);
+					console.log(row);
+				}
+			}
+		});
+	</script>
+</html>

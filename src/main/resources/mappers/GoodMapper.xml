@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace = 所需实现的接口全限定名-->
+<mapper namespace="com.bess.springboot.wfx.dao.GoodDAO">
+    <resultMap id="goodMap" type="Good">
+        <id column="good_id" property="goodId"/>
+        <result column="good_name" property="goodName"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="good_pic1" property="goodPic1"/>
+        <result column="good_pic2" property="goodPic2"/>
+        <result column="good_pic3" property="goodPic3"/>
+        <result column="promote_desc" property="promoteDesc"/>
+        <result column="copy_ids" property="copyIds"/>
+        <result column="copy_desc" property="copyDesc"/>
+        <result column="forward_link" property="forwardLink"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="tags" property="tags"/>
+        <result column="state" property="state"/>
+        <result column="create_time" property="createTime"/>
+        <result column="toped" property="toped"/>
+        <result column="recomed" property="recomed"/>
+        <result column="toped_time" property="topedTime"/>
+        <result column="recomed_time" property="recomedTime"/>
+        <result column="spc_id" property="spcId"/>
+        <result column="zon_id" property="zonId"/>
+        <result column="sell_num" property="sellNum"/>
+        <result column="website" property="website"/>
+        <result column="kfqq" property="kfqq"/>
+        <association property="goodType" javaType="GoodType">
+            <id column="type_id" property="typeId"/>
+            <result column="type_name" property="typeName"/>
+            <result column="parent_id" property="parentId"/>
+            <result column="alisa_code" property="alisaCode"/>
+        </association>
+    </resultMap>
+    <!--    public List<Good> listGoodByCustomerId(String customerId);   // 根据商户id查询所有的商品信息-->
+    <select id="listGoodByCustomerId" resultSets="java.util.List" resultMap="goodMap">
+        select wxb_good.good_id,
+        wxb_good.good_name,
+        wxb_good.customer_id,
+        wxb_good.good_pic1,
+        wxb_good.good_pic2,
+        wxb_good.good_pic3,
+        wxb_good.promote_desc,
+        wxb_good.copy_ids,
+        wxb_good.copy_desc,
+        wxb_good.forward_link,
+        wxb_good.order_no,
+        wxb_good_type.type_id,
+        wxb_good_type.type_name,
+        wxb_good_type.parent_id,
+        wxb_good_type.alisa_code,
+        wxb_good.tags,
+        wxb_good.state,
+        wxb_good.create_time,
+        wxb_good.toped,
+        wxb_good.recomed,
+        wxb_good.toped_time,
+        wxb_good.recomed_time,
+        wxb_good.spc_id,
+        wxb_good.zon_id,
+        wxb_good.sell_num,
+        wxb_good.website,
+        wxb_good.kfqq
+        from wxb_good inner join wxb_good_type on wxb_good.type_id = wxb_good_type.type_id
+        where wxb_good.customer_id = #{customerId}
+    </select>
+</mapper>
