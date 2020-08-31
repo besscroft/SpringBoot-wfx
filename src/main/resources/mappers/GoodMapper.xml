@@ -35,7 +35,7 @@
             <result column="alisa_code" property="alisaCode"/>
         </association>
     </resultMap>
-    <!--    public List<Good> listGoodByCustomerId(String customerId);   // 根据商户id查询所有的商品信息-->
+    <!--    public List<Good> listGoodByCustomerId(@Param("customerId") String customerId,@Param("start") int start,@Param("page") int page);   // 根据商户id查询所有的商品信息-->
     <select id="listGoodByCustomerId" resultSets="java.util.List" resultMap="goodMap">
         select wxb_good.good_id,
         wxb_good.good_name,
@@ -66,5 +66,11 @@
         wxb_good.kfqq
         from wxb_good inner join wxb_good_type on wxb_good.type_id = wxb_good_type.type_id
         where wxb_good.customer_id = #{customerId}
+        limit #{start},#{size}
     </select>
+<!--    public int insertGood(Good good);   // 添加图书-->
+    <insert id="insertGood">
+        insert into wxb_good(good_id,good_name,customer_id,good_pic1,promote_desc,copy_ids,copy_desc,forward_link,order_no,type_id,tags,state,create_time,toped,recomed,toped_time,recomed_time,spc_id,zon_id,sell_num,website,kfqq)
+        values(#{goodId},#{goodName},#{customerId},#{goodPic1},#{promoteDesc},#{copyIds},#{copyDesc},#{forwardLink},#{orderNo},#{goodType.typeId},#{tags},#{state},#{createTime},#{toped},#{recomed},#{topedTime},#{recomedTime},#{spcId},#{zonId},#{sellNum},#{website},#{kfqq})
+    </insert>
 </mapper>

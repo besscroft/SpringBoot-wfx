@@ -19,7 +19,12 @@ public class GoodServiceImpl implements GoodService {
     private GoodDAO goodDAO;
 
     @Override
-    public List<Good> listGoodByCustomerId(String customerId) {
-        return goodDAO.listGoodByCustomerId(customerId);
+    public List<Good> listGoodByCustomerId(String customerId, int start, int size) {
+        return goodDAO.listGoodByCustomerId(customerId,start,size);
+    }
+
+    @Override
+    public boolean insertGood(Good good) {
+        return goodDAO.insertGood(good) > 0;
     }
 }

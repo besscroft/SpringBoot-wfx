@@ -10,7 +10,7 @@ Vue.component("leftnav-cus",{
 						<a class="" href="javascript:;">商品管理</a>
 						<dl class="layui-nav-child">
 							<dd><a href="product_list.html" target="main_self_frame">商品信息</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">增加商品</a></dd>
+							<dd><a href="product_add.html" target="main_self_frame">增加商品</a></dd>
 							<dd><a href="javascript:;" target="main_self_frame">增加文案</a></dd>
 							<dd><a href="javascript:;" target="main_self_frame">增加微信文案</a></dd>
 						</dl>
