@@ -50,4 +50,9 @@
         from wxb_memeber
         where account = #{account}
     </select>
+<!--    public int insertMemeber(Memeber memeber);  // 注册-->
+    <insert id="insertMemeber">
+        insert into wxb_memeber(memeber_id,account,qq_num,email,phone,recom_user,register_time,pay_account,name,password,visit_code,use_recom,level_code,update_time)
+        values(#{memeberId},#{account},#{qqNum},#{email},#{phone},#{recomUser},#{registerTime},#{payAccount},#{name},#{password},#{visitCode},#{useRecom},#{levelCode},#{updateTime})
+    </insert>
 </mapper>

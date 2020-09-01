@@ -9,4 +9,5 @@ import com.bess.springboot.wfx.pojo.Memeber;
 public interface MemeberService {
     public Memeber login(String account,String password);  // 自媒体用户登录
     public Memeber getMemeberByLoginName(String account);   // 登录后根据JWT解码后的用户名查询用户信息（Memeber对象）
+    public boolean insertMemeber(Memeber memeber);  // 注册
 }

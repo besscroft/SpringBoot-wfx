@@ -4,6 +4,9 @@ import com.bess.springboot.wfx.dao.MemeberDAO;
 import com.bess.springboot.wfx.pojo.Memeber;
 import com.bess.springboot.wfx.service.MemeberService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -25,5 +28,11 @@ public class MemeberServiceImpl implements MemeberService {
     @Override
     public Memeber getMemeberByLoginName(String account) {
         return memeberDAO.getMemeberByLoginName(account);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRED)
+    public boolean insertMemeber(Memeber memeber) {
+        return memeberDAO.insertMemeber(memeber) > 0;
     }
 }

@@ -34,7 +34,8 @@ public class JWTFilter implements Filter {
         System.out.println("请求资源："+request.getRequestURI());
         if (uri.endsWith("/customer/login") || uri.endsWith("/memeber/login")
             || uri.contains("swagger-")||uri.contains("api-docs")
-            ||uri.contains("favicon") || "OPTIONS".equals(method)) {
+            || uri.contains("favicon") || "OPTIONS".equals(method)
+            || uri.endsWith("/memeber/register")) {
             System.out.println("放行了");
             // 放行
             filterChain.doFilter(request,response);
