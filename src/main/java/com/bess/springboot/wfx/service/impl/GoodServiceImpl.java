@@ -4,6 +4,9 @@ import com.bess.springboot.wfx.dao.GoodDAO;
 import com.bess.springboot.wfx.pojo.Good;
 import com.bess.springboot.wfx.service.GoodService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,16 +27,19 @@ public class GoodServiceImpl implements GoodService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public boolean insertGood(Good good) {
         return goodDAO.insertGood(good) > 0;
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public boolean deleteGood(String goodId) {
         return goodDAO.deleteGood(goodId) > 0;
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public boolean updateGood(Good good) {
         return goodDAO.updateGood(good) > 0;
     }
