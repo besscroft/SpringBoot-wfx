@@ -2,11 +2,10 @@ package com.bess.springboot.wfx.controller;
 
 import com.bess.springboot.wfx.pojo.Customer;
 import com.bess.springboot.wfx.service.CustomerService;
+import com.bess.springboot.wfx.util.JWTUtil;
 import com.bess.springboot.wfx.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * @Author Bess Croft
@@ -39,13 +37,7 @@ public class CustomerController {
         Customer customer = customerService.login(username, password);
         if (customer != null) {
             // 登录成功后生成token
-            String token = Jwts.builder()
-                    .setSubject(customer.getLoginName()) // 设置商户信息
-                    .setId(customer.getCustomerId())    // 设置商户id
-                    .setIssuedAt(new Date()) // 设置token创建时间
-                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 设置过期时间
-                    .signWith(SignatureAlgorithm.HS256, "fadj@Jq4$fka")  // 设置加密方式和密码
-                    .compact();
+            String token = JWTUtil.encrypt(customer.getLoginName(), customer.getCustomerId());
             return new ResultVO(0,"登录成功",token);
         } else {
             // 登录失败
@@ -58,10 +50,9 @@ public class CustomerController {
     @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     public ResultVO getInfo(@RequestHeader(required = true) String token){
         // 验证token
-        Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String name = jws.getBody().getSubject();
-        System.out.println("解析后的用户名："+name);
         Customer customer = customerService.getCustomerByLoginName(name);
         if (customer != null) {
             return new ResultVO(0,"查询成功",customer);

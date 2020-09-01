@@ -1,5 +1,6 @@
 package com.bess.springboot.wfx.filter;
 
+import com.bess.springboot.wfx.util.JWTUtil;
 import io.jsonwebtoken.*;
 
 import javax.servlet.*;
@@ -44,7 +45,7 @@ public class JWTFilter implements Filter {
                 //判断请求的请求头是否带上 "Token"
                 if (request.getHeader("token") != null) {
                     // 验证token
-                    Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(request.getHeader("token"));
+                    Jws<Claims> jws = JWTUtil.Decrypt(request.getHeader("token"));
                     filterChain.doFilter(request,response);
                 }
             } catch (Exception e) {
@@ -60,4 +61,5 @@ public class JWTFilter implements Filter {
     public void destroy() {
 
     }
+
 }

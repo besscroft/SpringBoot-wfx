@@ -3,6 +3,7 @@ package com.bess.springboot.wfx.controller;
 import com.bess.springboot.wfx.pojo.Good;
 import com.bess.springboot.wfx.pojo.GoodType;
 import com.bess.springboot.wfx.service.GoodService;
+import com.bess.springboot.wfx.util.JWTUtil;
 import com.bess.springboot.wfx.util.RandomId;
 import com.bess.springboot.wfx.vo.ResultVO;
 import io.jsonwebtoken.Claims;
@@ -38,7 +39,7 @@ public class GoodController {
     public ResultVO listGoodByCustomerId(int size,int current,@RequestHeader(required = true) String token) {
         int start = (current - 1) * size;   // 从第几行开始查
         // 验证token
-        Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
         List<Good> goods = goodService.listGoodByCustomerId(customerId,start,size);
@@ -63,7 +64,7 @@ public class GoodController {
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
     public ResultVO insertGood(String goodName,String goodPic1,String promoteDesc,String copyDesc,String forwardLink,String typeId,String website,String kfqq,@RequestHeader(required = true) String token) {
-        Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
         Good good = new Good(RandomId.getNum(8),goodName,customerId,goodPic1,"","",promoteDesc,"wenan"+RandomId.getNum(10),copyDesc,forwardLink,2,new GoodType(typeId,"","","",0,""),"tags",0,new Date(),0,0,new Date(),new Date(),"","",0,website,kfqq);
@@ -82,7 +83,7 @@ public class GoodController {
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
     public ResultVO deleteGood(String goodId,@RequestHeader(required = true) String token){
-        Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
         boolean b = goodService.deleteGood(goodId);
         if (b) {
             return new ResultVO(0,"删除成功",null);
@@ -106,7 +107,7 @@ public class GoodController {
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
     public ResultVO updateGood(String goodId,String goodName,String goodPic1,String promoteDesc,String copyDesc,String forwardLink,String typeId,String website,String kfqq,@RequestHeader(required = true) String token) {
-        Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
         Good good = new Good(goodId,goodName,customerId,goodPic1,"","",promoteDesc,"wenan"+RandomId.getNum(10),copyDesc,forwardLink,2,new GoodType(typeId,"","","",0,""),"tags",0,new Date(),0,0,new Date(),new Date(),"","",0,website,kfqq);

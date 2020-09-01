@@ -2,6 +2,7 @@ package com.bess.springboot.wfx.controller;
 
 import com.bess.springboot.wfx.pojo.Memeber;
 import com.bess.springboot.wfx.service.MemeberService;
+import com.bess.springboot.wfx.util.JWTUtil;
 import com.bess.springboot.wfx.util.RandomId;
 import com.bess.springboot.wfx.vo.ResultVO;
 import io.jsonwebtoken.Claims;
@@ -41,13 +42,7 @@ public class MemeberController {
         Memeber memeber = memeberService.login(username, password);
         if (memeber != null) {
             // 登录成功后生成token
-            String token = Jwts.builder()
-                    .setSubject(memeber.getAccount()) // 设置商户信息
-                    .setId(memeber.getMemeberId())    // 设置商户id
-                    .setIssuedAt(new Date()) // 设置token创建时间
-                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 设置过期时间
-                    .signWith(SignatureAlgorithm.HS256, "fadj@Jq4$fka")  // 设置加密方式和密码
-                    .compact();
+            String token = JWTUtil.encrypt(memeber.getAccount(), memeber.getMemeberId());
             return new ResultVO(0,"登录成功",token);
         } else {
             // 登录失败
@@ -60,7 +55,7 @@ public class MemeberController {
     @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     public ResultVO getInfo(@RequestHeader(required = true) String token){
         // 验证token
-        Jws<Claims> jws = Jwts.parser().setSigningKey("fadj@Jq4$fka").parseClaimsJws(token);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String name = jws.getBody().getSubject();
         Memeber memeber = memeberService.getMemeberByLoginName(name);
