@@ -4,15 +4,15 @@ Vue.component("leftnav-cus",{
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree" lay-filter="test">
 					<li class="layui-nav-item layui-nav-itemed">
-						<a class="" href="../404.html" target="main_self_frame">系统首页</a>
+						<a class="" href="../bulletin.html" target="main_self_frame">系统首页</a>
 					</li>
 					<li class="layui-nav-item">
 						<a class="" href="javascript:;">商品管理</a>
 						<dl class="layui-nav-child">
 							<dd><a href="product_list.html" target="main_self_frame">商品信息</a></dd>
 							<dd><a href="product_add.html" target="main_self_frame">增加商品</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">增加文案</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">增加微信文案</a></dd>
+							<dd><a href="copy_manager.html" target="main_self_frame">文案管理</a></dd>
+							<dd><a href="copy_add.html" target="main_self_frame">增加文案</a></dd>
 						</dl>
 					</li>
 					<li class="layui-nav-item">

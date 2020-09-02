@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace = 所需实现的接口全限定名-->
+<mapper namespace="com.bess.springboot.wfx.dao.GoodCopyDAO">
+    <resultMap id="goodCopyMap" type="GoodCopy">
+        <id column="copy_id" property="copyId"/>
+        <result column="copy_title" property="copyTitle"/>
+        <result column="copy_link" property="copyLink"/>
+        <result column="copy_content" property="copyContent"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="type_id" property="typeId"/>
+        <result column="goods_id" property="goodsId"/>
+    </resultMap>
+<!--    public List<GoodCopy> listGoodCopyByPage(@Param("customerId") String customerId, @Param("start") int start, @Param("size") int size);   // 根据商户id查询所有的商品文案信息-->
+    <select id="listGoodCopyByPage" resultSets="java.util.List" resultMap="goodCopyMap">
+        select wxb_good_copy.copy_id,wxb_good_copy.copy_title,
+        wxb_good_copy.copy_link,wxb_good_copy.copy_content,
+        wxb_good_copy.order_no,wxb_good_copy.type_id,wxb_good_copy.goods_id
+        from wxb_good_copy inner join wxb_good on wxb_good_copy.goods_id = wxb_good.good_id
+        inner join wxb_customer on wxb_good.customer_id = wxb_customer.customer_id
+        where wxb_customer.customer_id = #{customerId}
+        limit #{start},#{size}
+    </select>
+<!--    public int insertGoodCopy(GoodCopy goodCopy);   // 添加商品文案-->
+    <insert id="insertGoodCopy">
+        insert into wxb_good_copy(copy_title,copy_link,copy_content,order_no,type_id,goods_id)
+        values(#{copyTitle},#{copyLink},#{copyContent},#{orderNo},#{typeId},#{goodsId})
+    </insert>
+<!--    public int deleteGoodCopy(int copyId);   // 删除商品文案-->
+    <delete id="deleteGoodCopy">
+        delete from wxb_good_copy where copy_id = #{copyId}
+    </delete>
+<!--    public int updateGoodCopy(GoodCopy goodCopy);   // 更新商品文案-->
+    <update id="updateGoodCopy">
+        update wxb_good_copy
+        set copy_title = #{copyTitle},copy_link = #{copyLink},copy_content = #{copyContent},order_no = #{orderNo},type_id = #{typeId}
+        where goods_id = #{goodsId} and copy_id = #{copyId}
+    </update>
+</mapper>

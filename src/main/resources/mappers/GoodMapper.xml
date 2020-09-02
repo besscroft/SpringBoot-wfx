@@ -83,4 +83,44 @@
         set good_name = #{goodName},good_pic1 = #{goodPic1},promote_desc = #{promoteDesc},copy_desc = #{copyDesc},forward_link = #{forwardLink},type_id = #{goodType.typeId},website = #{website},kfqq = #{kfqq}
         where good_id = #{goodId}
     </update>
+<!--    public List<Good> listGoodById(String customerId);   // 根据商户id查询所有的商品信息(不分页)-->
+    <select id="listGoodById" resultSets="java.util.List" resultMap="goodMap">
+        select wxb_good.good_id,
+        wxb_good.good_name,
+        wxb_good.customer_id,
+        wxb_good.good_pic1,
+        wxb_good.good_pic2,
+        wxb_good.good_pic3,
+        wxb_good.promote_desc,
+        wxb_good.copy_ids,
+        wxb_good.copy_desc,
+        wxb_good.forward_link,
+        wxb_good.order_no,
+        wxb_good_type.type_id,
+        wxb_good_type.type_name,
+        wxb_good_type.parent_id,
+        wxb_good_type.alisa_code,
+        wxb_good.tags,
+        wxb_good.state,
+        wxb_good.create_time,
+        wxb_good.toped,
+        wxb_good.recomed,
+        wxb_good.toped_time,
+        wxb_good.recomed_time,
+        wxb_good.spc_id,
+        wxb_good.zon_id,
+        wxb_good.sell_num,
+        wxb_good.website,
+        wxb_good.kfqq
+        from wxb_good inner join wxb_good_type on wxb_good.type_id = wxb_good_type.type_id
+        where wxb_good.customer_id = #{customerId}
+    </select>
+<!--    public int updateGoodCopy(@Param("copyIds") int copyIds,
+        @Param("copyDesc") String copyDesc,
+        @Param("goodId") String goodId);  // 添加文案后，对商品的文案关联信息更新-->
+    <update id="updateGoodCopy">
+        update wxb_good
+        set copy_ids = #{copyIds}, copy_desc = #{copyDesc}
+        where good_id = #{goodId}
+    </update>
 </mapper>

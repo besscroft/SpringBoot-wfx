@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../assets/layui/css/layui.css"/>
+	</head>
+	<body>
+		
+		<div id="container">
+			<el-form label-width="80px">
+				<el-form-item label="文案标题">
+					<el-input v-model="copyTitle"></el-input>
+				</el-form-item>
+				<el-form-item label="文案链接">
+					<el-input v-model="copyLink"></el-input>
+				</el-form-item>
+				<el-form-item label="文案内容">
+					<el-input v-model="copyContent"></el-input>
+				</el-form-item>
+				<el-form-item label="文案类型">
+					<el-select v-model="typeId" placeholder="请选择活动区域">
+						<el-option label="微信文案" value="0"></el-option>
+						<el-option label="站内文案" value="1"></el-option>
+						<el-option label="日志文案" value="2"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="商品">
+					<el-select v-model="goodId" placeholder="请选择活动区域">
+						<el-option v-for="item in goodData" :label="item.goodName" :value="item.goodId"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item>
+				    <el-button type="primary" @click="onSubmit">立即添加</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
+		
+	</body>
+	<script src="../assets/js/vue.js"></script>
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+	<script src="../assets/axios/axios.min.js"></script>
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:"#container",
+			data:{
+				copyTitle:"",
+				copyLink:"",
+				copyContent:"",
+				typeId:01,
+				goodData:[],
+				goodId:""
+			},
+			beforeMount:function(){
+				var tokenStr = "";
+				var str = document.cookie;
+				var arr = str.split(";");
+				for(var i=0;i<arr.length;i++){
+					var s = arr[i];
+					if(s.split("=")[0].trim() == "token"){
+						tokenStr = s.split("=")[1];
+						break;
+					}
+				}
+				console.log(tokenStr);
+				axios({
+					method: 'get',
+					url: 'http://localhost:8080/good/list',
+					headers: {'token': tokenStr},
+				}).then(function(res) {
+					vm.goodData = res.data.data;
+					// vm.total = res.data.data.length;
+				});
+			},
+			methods:{
+				onSubmit:function(res){
+					var tokenStr = "";
+					var str = document.cookie;
+					var arr = str.split(";");
+					for(var i=0;i<arr.length;i++){
+						var s = arr[i];
+						if(s.split("=")[0].trim() == "token"){
+							tokenStr = s.split("=")[1];
+							break;
+						}
+					}
+					axios({
+						method: 'put',
+						url: 'http://localhost:8080/goodcopy/insert',
+						headers: {'token': tokenStr},
+						params: {
+							copyTitle: vm.copyTitle,
+							copyLink: vm.copyLink,
+							copyContent: vm.copyContent,
+							typeId: vm.typeId,
+							goodsId: vm.goodId
+						}
+					}).then(function(res) {
+						if(res.data.code == 0){
+							vm.$message('添加成功');
+						}
+					});
+				}
+			}
+		});
+	</script>
+</html>

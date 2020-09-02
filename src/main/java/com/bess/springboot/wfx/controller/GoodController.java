@@ -29,8 +29,24 @@ public class GoodController {
     @Resource
     private GoodService goodService;
 
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @ApiOperation(value = "商品信息查询接口" , notes = "根据商户的id查询该商户所有的商品，不分页")
+    @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
+    public ResultVO listGood(@RequestHeader(required = true) String token) {
+        // 验证token
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        // 获取解析的token中的用户名、id等
+        String customerId = jws.getBody().getId();
+        List<Good> goods = goodService.listGoodById(customerId);
+        if (goods != null) {
+            return new ResultVO(0,"查询成功",goods);
+        } else {
+            return new ResultVO(1,"查询失败",null);
+        }
+    }
+
     @RequestMapping(value = "/listbyid", method = RequestMethod.GET)
-    @ApiOperation(value = "商品信息查询接口" , notes = "根据商户的id查询该商户所有的商品，但是只有在登录后才能查询到，需要token")
+    @ApiOperation(value = "商品信息查询接口" , notes = "根据商户的id查询该商户所有的商品，但是只有在登录后才能查询到，需要token，分页查询")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "size", value = "每一页的数量", required = true, type = "int"),
         @ApiImplicitParam(name = "current", value = "页码", required = true, type = "int"),
@@ -83,7 +99,6 @@ public class GoodController {
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
     public ResultVO deleteGood(String goodId,@RequestHeader(required = true) String token){
-        Jws<Claims> jws = JWTUtil.Decrypt(token);
         boolean b = goodService.deleteGood(goodId);
         if (b) {
             return new ResultVO(0,"删除成功",null);

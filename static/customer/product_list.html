@@ -61,6 +61,7 @@
 					</span>
 				</el-dialog>
 			</el-row>
+			
 			<template>
 				<el-table :data="tableData" height="540" border style="width: 100%">
 					<el-table-column prop="goodName" label="商品名称" width="180"></el-table-column>
@@ -179,8 +180,7 @@
 				dialogVisible: false,
 				dialogVisibleUpdate: false,
 				updateindex:0,
-				updaterow:[]
-				,
+				updaterow:[],
 				goodName:"",
 				goodPic1:"",
 				promoteDesc:"",
@@ -211,8 +211,6 @@
 						current:1
 					}
 				}).then(function(res) {
-					console.log(res.data.data);
-					// console.log(res.data.data.length);
 					vm.tableData = res.data.data;
 					vm.total = res.data.data.length;
 				});
@@ -224,8 +222,6 @@
 					vm.updaterow = row;
 				},
 				handleDelete:function(index,rows){
-					console.log(index);
-					console.log(rows[index]);
 					vm.pagesize = event;
 					var tokenStr = "";
 					var str = document.cookie;
@@ -250,7 +246,6 @@
 								goodId:rows[index].goodId
 							}
 						}).then(function(res) {
-							console.log(res);
 							rows.splice(index, 1);
 							vm.$message({
 								type: 'success',
@@ -265,7 +260,6 @@
 					});
 				},
 				handleSizeChange:function(event){
-					console.log(event);
 					vm.pagesize = event;
 					var tokenStr = "";
 					var str = document.cookie;
@@ -286,14 +280,11 @@
 							current:event
 						}
 					}).then(function(res) {
-						console.log(res.data.data);
-						console.log(res.data.data.length);
 						vm.tableData = res.data.data;
 						vm.total = res.data.data.length;
 					});
 				},
 				handleCurrentChange:function(event){
-					console.log(event);
 					var tokenStr = "";
 					var str = document.cookie;
 					var arr = str.split(";");
@@ -313,8 +304,6 @@
 							current:event
 						}
 					}).then(function(res) {
-						console.log(res.data.data);
-						console.log(res.data.data.length);
 						vm.tableData = res.data.data;
 						vm.total = res.data.data.length;
 					});
@@ -387,8 +376,7 @@
 							kfqq:vm.updaterow.kfqq
 						}
 					}).then(function(res) {
-						console.log(res);
-						if(res){
+						if(res.data.code == 0){
 							vm.$message('更新成功');
 							location.href = "product_list.html";
 						}

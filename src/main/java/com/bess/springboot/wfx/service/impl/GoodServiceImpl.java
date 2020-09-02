@@ -43,4 +43,15 @@ public class GoodServiceImpl implements GoodService {
     public boolean updateGood(Good good) {
         return goodDAO.updateGood(good) > 0;
     }
+
+    @Override
+    public List<Good> listGoodById(String customerId) {
+        return goodDAO.listGoodById(customerId);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
+    public int updateGoodCopy(int copyIds, String copyDesc, String goodId) {
+        return goodDAO.updateGoodCopy(copyIds,copyDesc,goodId);
+    }
 }

@@ -18,7 +18,7 @@ Vue.component("myhead",{
 						<dd><a href="">安全设置</a></dd>
 					</dl>
 				</li>
-				<li class="layui-nav-item"><a href="">退出</a></li>
+				<li class="layui-nav-item"><a href="javascript:;">退出</a></li>
 			</ul>
 		</div>`,
 	props:["title","username"]
