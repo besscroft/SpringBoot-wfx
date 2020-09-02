@@ -64,6 +64,7 @@
 			
 			<template>
 				<el-table :data="tableData" height="540" border style="width: 100%">
+					<el-table-column prop="goodType.typId" v-if="false"></el-table-column>
 					<el-table-column prop="goodName" label="商品名称" width="180"></el-table-column>
 					<el-table-column prop="goodPic1" label="商品图片" width="80">
 						<template slot-scope="scope">
@@ -136,7 +137,7 @@
 						<el-input v-model="updaterow.forwardLink"></el-input>
 					</el-form-item>
 					<el-form-item label="商品分类">
-						<el-select v-model="updaterow.typeId" placeholder="请选择商品类别">
+						<el-select v-model="typeIdNew" placeholder="请选择商品类别">
 							<el-option label="保健品" value="01"></el-option>
 							<el-option label="饰品" value="02"></el-option>
 							<el-option label="护肤品" value="03"></el-option>
@@ -188,7 +189,8 @@
 				forwardLink:"",
 				typeId:01,
 				website:"",
-				kfqq:88888888
+				kfqq:88888888,
+				typeIdNew:01
 			},
 			beforeMount:function(res){
 				var tokenStr = "";
@@ -216,6 +218,7 @@
 			},
 			methods:{
 				handleEdit:function(index,row){
+					vm.typeIdNew = row.goodType.typeId;
 					vm.dialogVisibleUpdate = true;
 					vm.updateindex = index;
 					vm.updaterow = row;
@@ -370,7 +373,7 @@
 							promoteDesc:vm.updaterow.promoteDesc,
 							copyDesc:vm.updaterow.copyDesc,
 							forwardLink:vm.updaterow.forwardLink,
-							typeId:vm.updaterow.typeId,
+							typeId:vm.typeIdNew,
 							website:vm.updaterow.website,
 							kfqq:vm.updaterow.kfqq
 						}
