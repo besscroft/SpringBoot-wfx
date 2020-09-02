@@ -10,6 +10,7 @@ import java.util.List;
  * @DateTime 2020/8/31 14:25
  */
 public interface GoodDAO {
+    public int getCount(String customerId); // 查询所有商品数量
     public List<Good> listGoodByCustomerId(@Param("customerId") String customerId,
                                            @Param("start") int start,
                                            @Param("size") int size);   // 根据商户id查询所有的商品信息
@@ -20,4 +21,6 @@ public interface GoodDAO {
     public int updateGoodCopy(@Param("copyIds") int copyIds,
                               @Param("copyDesc") String copyDesc,
                               @Param("goodId") String goodId);  // 添加文案后，对商品的文案关联信息更新
+    public List<Good> listGood(@Param("start") int start,
+                               @Param("size") int size);   // 查询所有的商品信息
 }

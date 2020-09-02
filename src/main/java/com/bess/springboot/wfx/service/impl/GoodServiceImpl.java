@@ -22,6 +22,11 @@ public class GoodServiceImpl implements GoodService {
     private GoodDAO goodDAO;
 
     @Override
+    public int getCount(String customerId) {
+        return goodDAO.getCount(customerId);
+    }
+
+    @Override
     public List<Good> listGoodByCustomerId(String customerId, int start, int size) {
         return goodDAO.listGoodByCustomerId(customerId,start,size);
     }
@@ -53,5 +58,10 @@ public class GoodServiceImpl implements GoodService {
     @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public int updateGoodCopy(int copyIds, String copyDesc, String goodId) {
         return goodDAO.updateGoodCopy(copyIds,copyDesc,goodId);
+    }
+
+    @Override
+    public List<Good> listGood(int start, int size) {
+        return goodDAO.listGood(start,size);
     }
 }

@@ -123,4 +123,47 @@
         set copy_ids = #{copyIds}, copy_desc = #{copyDesc}
         where good_id = #{goodId}
     </update>
+<!--    public List<Good> listGood(@Param("start") int start,
+        @Param("size") int size);   // 查询所有的商品信息-->
+    <select id="listGood" resultSets="java.util.List" resultMap="goodMap">
+        select wxb_good.good_id,
+        wxb_good.good_name,
+        wxb_good.customer_id,
+        wxb_good.good_pic1,
+        wxb_good.good_pic2,
+        wxb_good.good_pic3,
+        wxb_good.promote_desc,
+        wxb_good.copy_ids,
+        wxb_good.copy_desc,
+        wxb_good.forward_link,
+        wxb_good.order_no,
+        wxb_good_type.type_id,
+        wxb_good_type.type_name,
+        wxb_good_type.parent_id,
+        wxb_good_type.alisa_code,
+        wxb_good.tags,
+        wxb_good.state,
+        wxb_good.create_time,
+        wxb_good.toped,
+        wxb_good.recomed,
+        wxb_good.toped_time,
+        wxb_good.recomed_time,
+        wxb_good.spc_id,
+        wxb_good.zon_id,
+        wxb_good.sell_num,
+        wxb_good.website,
+        wxb_good.kfqq
+        from wxb_good inner join wxb_good_type on wxb_good.type_id = wxb_good_type.type_id
+        limit #{start},#{size}
+    </select>
+<!--    public int getCount(String customerId); // 查询所有商品数量-->
+    <select id="getCount" resultType="int">
+        select count(1) from wxb_good
+        inner join wxb_good_type on wxb_good.type_id = wxb_good_type.type_id
+        <where>
+            <if test="customerId != null">
+                customer_id = #{customerId}
+            </if>
+        </where>
+    </select>
 </mapper>

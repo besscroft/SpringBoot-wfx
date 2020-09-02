@@ -5,10 +5,10 @@ import com.bess.springboot.wfx.pojo.GoodType;
 import com.bess.springboot.wfx.service.GoodService;
 import com.bess.springboot.wfx.util.JWTUtil;
 import com.bess.springboot.wfx.util.RandomId;
+import com.bess.springboot.wfx.vo.ResultGetVO;
 import com.bess.springboot.wfx.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +52,7 @@ public class GoodController {
         @ApiImplicitParam(name = "current", value = "页码", required = true, type = "int"),
         @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
-    public ResultVO listGoodByCustomerId(int size,int current,@RequestHeader(required = true) String token) {
+    public ResultGetVO listGoodByCustomerId(int size, int current, @RequestHeader(required = true) String token) {
         int start = (current - 1) * size;   // 从第几行开始查
         // 验证token
         Jws<Claims> jws = JWTUtil.Decrypt(token);
@@ -60,9 +60,10 @@ public class GoodController {
         String customerId = jws.getBody().getId();
         List<Good> goods = goodService.listGoodByCustomerId(customerId,start,size);
         if (goods != null) {
-            return new ResultVO(0,"查询成功",goods);
+            int count = goodService.getCount(customerId);
+            return new ResultGetVO(0,"查询成功",count,goods);
         } else {
-            return new ResultVO(1,"查询失败",null);
+            return new ResultGetVO(1,"查询失败",0,null);
         }
     }
 
@@ -131,6 +132,24 @@ public class GoodController {
             return new ResultVO(0,"更新成功",null);
         } else {
             return new ResultVO(1,"更新失败",null);
+        }
+    }
+
+    @RequestMapping(value = "/listall", method = RequestMethod.GET)
+    @ApiOperation(value = "商品信息查询接口" , notes = "查询所有的商品，在登录后才能查询到，需要token，分页查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "每一页的数量", required = true, type = "int"),
+            @ApiImplicitParam(name = "current", value = "页码", required = true, type = "int"),
+            @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
+    })
+    public ResultGetVO listGood(int size,int current,@RequestHeader(required = true) String token) {
+        int start = (current - 1) * size;   // 从第几行开始查
+        List<Good> goods = goodService.listGood(start, size);
+        if (goods != null) {
+            int count = goodService.getCount(null);
+            return new ResultGetVO(0,"查询成功",count,goods);
+        } else {
+            return new ResultGetVO(1,"查询失败",0,null);
         }
     }
 }

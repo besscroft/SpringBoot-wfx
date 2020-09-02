@@ -87,7 +87,8 @@
 				tableData:[],
 				total: 100,
 				size: 1,
-				pagesize: 20
+				pagesize: 20,
+				currentPage4: 4
 			},
 			beforeMount:function(){
 				var tokenStr = "";
@@ -110,9 +111,73 @@
 					}
 				}).then(function(res) {
 					console.log(res);
+					if (res.data === "认证失败") {
+						location.href = "../login.html";
+					}
 					vm.tableData = res.data.data;
-					vm.total = res.data.data.length;
+					vm.total = res.data.count;
 				});
+			},
+			methods:{
+				handleSizeChange:function(event){
+					console.log("handleSizeChange");
+					console.log(event);
+					vm.pagesize = event;
+					var tokenStr = "";
+					var str = document.cookie;
+					var arr = str.split(";");
+					for(var i=0;i<arr.length;i++){
+						var s = arr[i];
+						if(s.split("=")[0].trim() == "token"){
+							tokenStr = s.split("=")[1];
+							break;
+						}
+					}
+					axios({
+						method: 'get',
+						url: 'http://localhost:8080/order/listall',
+						headers: {'token': tokenStr},
+						params: {
+							size:vm.pagesize,
+							current:1
+						}
+					}).then(function(res) {
+						if (res.data === "认证失败") {
+							location.href = "../login.html";
+						}
+						vm.tableData = res.data.data;
+						vm.total = res.data.count;
+					});
+				},
+				handleCurrentChange:function(event){
+					console.log("handleCurrentChange");
+					console.log(event);
+					var tokenStr = "";
+					var str = document.cookie;
+					var arr = str.split(";");
+					for(var i=0;i<arr.length;i++){
+						var s = arr[i];
+						if(s.split("=")[0].trim() == "token"){
+							tokenStr = s.split("=")[1];
+							break;
+						}
+					}
+					axios({
+						method: 'get',
+						url: 'http://localhost:8080/order/listall',
+						headers: {'token': tokenStr},
+						params: {
+							size:vm.pagesize,
+							current:event
+						}
+					}).then(function(res) {
+						if (res.data === "认证失败") {
+							location.href = "../login.html";
+						}
+						vm.tableData = res.data.data;
+						vm.total = res.data.count;
+					});
+				}
 			}
 		});
 	</script>

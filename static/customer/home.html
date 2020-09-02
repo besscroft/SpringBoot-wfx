@@ -83,6 +83,9 @@
 					url: 'http://localhost:8080/customer/info',
 					headers: {'token': tokenStr}
 				}).then(function(res) {
+					if (res.data === "认证失败") {
+						location.href = "../login.html";
+					}
 					vm.username = res.data.data.customerName;
 				});
 			},

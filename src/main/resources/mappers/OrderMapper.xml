@@ -118,7 +118,60 @@
         @Param("start") int start,
         @Param("size") int size,
         @Param("orderType") int orderType);   // 根据商户id查询所有的订单信息(orderType字段)-->
-    <select id="getOrderByOrderType" resultSets="java.util.List" resultMap="orderMap">
+<!--    <select id="getOrderByOrderType" resultSets="java.util.List" resultMap="orderMap">-->
+<!--        select-->
+<!--        wxb_order.oid,-->
+<!--        wxb_order.order_id,-->
+<!--        wxb_order.buyer_phone,-->
+<!--        wxb_order.good_id,-->
+<!--        wxb_order.order_time,-->
+<!--        wxb_order.channel_id,-->
+<!--        wxb_order.state,-->
+<!--        wxb_order.buy_num,-->
+<!--        wxb_order.province,-->
+<!--        wxb_order.city,-->
+<!--        wxb_order.area,-->
+<!--        wxb_order.buyer_reamrk,-->
+<!--        wxb_order.pay_type,-->
+<!--        wxb_order.buyer_name,-->
+<!--        wxb_order.address,-->
+<!--        wxb_order.courier_id,-->
+<!--        wxb_order.order_remark,-->
+<!--        wxb_order.sender_type,-->
+<!--        wxb_order.order_type,-->
+<!--        wxb_order.admin_remark,-->
+<!--        wxb_order.operator,-->
+<!--        wxb_order.check_time,-->
+<!--        wxb_order.order_ip,-->
+<!--        wxb_order.update_time,-->
+<!--        wxb_order.alipay_state,-->
+<!--        wxb_order.isfk,-->
+<!--        wxb_order.kdzt,-->
+<!--        wxb_order.miaoshu,-->
+<!--        wxb_memeber.mid,-->
+<!--        wxb_memeber.memeber_id,-->
+<!--        wxb_memeber.name,-->
+<!--        wxb_good_sku.sku_id,-->
+<!--        wxb_good_sku.sku_name,-->
+<!--        wxb_good_sku.sku_cost,-->
+<!--        wxb_good_sku.sku_price,-->
+<!--        wxb_good_sku.sku_pmoney,-->
+<!--        wxb_good_sku.order_no,-->
+<!--        wxb_good_sku.service_money-->
+<!--        from wxb_order-->
+<!--        inner join wxb_memeber on wxb_order.user_id = wxb_memeber.memeber_id-->
+<!--        inner join wxb_good_sku on wxb_order.sku_id = wxb_good_sku.sku_id-->
+<!--        inner join wxb_good on wxb_order.good_id = wxb_good.good_id-->
+<!--        where wxb_good.customer_id = #{customerId}-->
+<!--        <if test="orderType != null">-->
+<!--            and wxb_order.order_type = #{orderType}-->
+<!--        </if>-->
+<!--        limit #{start},#{size}-->
+<!--    </select>-->
+<!--    public List<Order> getOrderByMemeber(@Param("memeberId") String memeberId,
+        @Param("start") int start,
+        @Param("size") int size);   // 根据自媒体用户id查询所有的订单信息-->
+    <select id="getOrderByMemeber" resultSets="java.util.List" resultMap="orderMap">
         select
         wxb_order.oid,
         wxb_order.order_id,
@@ -162,10 +215,24 @@
         inner join wxb_memeber on wxb_order.user_id = wxb_memeber.memeber_id
         inner join wxb_good_sku on wxb_order.sku_id = wxb_good_sku.sku_id
         inner join wxb_good on wxb_order.good_id = wxb_good.good_id
-        where wxb_good.customer_id = #{customerId}
-        <if test="orderType != null">
-            and wxb_order.order_type = #{orderType}
-        </if>
+        where wxb_memeber.memeber_id = #{memeberId}
         limit #{start},#{size}
+    </select>
+<!--    public int getCount(@Param("customerId") String customerId,
+        @Param("memeberId") String memeberId);  // 根据id查询所有的订单信息的数量（动态SQL）-->
+    <select id="getCount" resultType="int">
+        select count(1)
+        from wxb_order
+        inner join wxb_memeber on wxb_order.user_id = wxb_memeber.memeber_id
+        inner join wxb_good_sku on wxb_order.sku_id = wxb_good_sku.sku_id
+        inner join wxb_good on wxb_order.good_id = wxb_good.good_id
+        <where>
+            <if test="customerId != null">
+                and wxb_good.customer_id = #{customerId}
+            </if>
+            <if test="memeberId != null">
+                and wxb_memeber.memeber_id = #{memeberId}
+            </if>
+        </where>
     </select>
 </mapper>

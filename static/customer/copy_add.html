@@ -73,6 +73,9 @@
 					url: 'http://localhost:8080/good/list',
 					headers: {'token': tokenStr},
 				}).then(function(res) {
+					if (res.data === "认证失败") {
+						location.href = "../login.html";
+					}
 					vm.goodData = res.data.data;
 					// vm.total = res.data.data.length;
 				});
@@ -101,6 +104,9 @@
 							goodsId: vm.goodId
 						}
 					}).then(function(res) {
+						if (res.data === "认证失败") {
+							location.href = "../login.html";
+						}
 						if(res.data.code == 0){
 							vm.$message('添加成功');
 						}

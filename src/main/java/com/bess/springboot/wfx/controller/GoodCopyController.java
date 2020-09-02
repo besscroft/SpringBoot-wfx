@@ -3,6 +3,7 @@ package com.bess.springboot.wfx.controller;
 import com.bess.springboot.wfx.pojo.GoodCopy;
 import com.bess.springboot.wfx.service.GoodCopyService;
 import com.bess.springboot.wfx.util.JWTUtil;
+import com.bess.springboot.wfx.vo.ResultGetVO;
 import com.bess.springboot.wfx.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -35,7 +36,7 @@ public class GoodCopyController {
             @ApiImplicitParam(name = "current", value = "页码", required = true, type = "int"),
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
-    public ResultVO list(int size,int current,@RequestHeader(required = true) String token) {
+    public ResultGetVO list(int size, int current, @RequestHeader(required = true) String token) {
         int start = (current - 1) * size;   // 从第几行开始查
         // 验证token
         Jws<Claims> jws = JWTUtil.Decrypt(token);
@@ -43,9 +44,10 @@ public class GoodCopyController {
         String customerId = jws.getBody().getId();
         List<GoodCopy> goodCopies = goodCopyService.listGoodCopyByPage(customerId,start,size);
         if (goodCopies != null) {
-            return new ResultVO(0,"查询成功",goodCopies);
+            int count = goodCopyService.getCount(customerId);
+            return new ResultGetVO(0,"查询成功",count,goodCopies);
         } else {
-            return new ResultVO(1,"查询失败",null);
+            return new ResultGetVO(1,"查询失败",0,null);
         }
     }
 

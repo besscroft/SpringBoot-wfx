@@ -19,12 +19,22 @@ public class OrderServiceImpl implements OrderService {
     private OrderDAO orderDAO;
 
     @Override
+    public int getCount(String customerId, String memeberId) {
+        return orderDAO.getCount(customerId, memeberId);
+    }
+
+    @Override
     public List<Order> listOrderByCustomerId(String customerId, int start, int size) {
         return orderDAO.listOrderByCustomerId(customerId,start,size);
     }
 
+//    @Override
+//    public List<Order> getOrderByOrderType(String customerId, int start, int size, int orderType) {
+//        return orderDAO.getOrderByOrderType(customerId, start, size, orderType);
+//    }
+
     @Override
-    public List<Order> getOrderByOrderType(String customerId, int start, int size, int orderType) {
-        return orderDAO.getOrderByOrderType(customerId, start, size, orderType);
+    public List<Order> getOrderByMemeber(String memeberId, int start, int size) {
+        return orderDAO.getOrderByMemeber(memeberId, start, size);
     }
 }

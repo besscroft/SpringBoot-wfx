@@ -38,4 +38,11 @@
         set copy_title = #{copyTitle},copy_link = #{copyLink},copy_content = #{copyContent},order_no = #{orderNo},type_id = #{typeId}
         where goods_id = #{goodsId} and copy_id = #{copyId}
     </update>
+<!--    public int getCount(String customerId); // 根据商户id查询所有的商品文案信息的数量-->
+    <select id="getCount" resultType="int">
+        select count(1)
+        from wxb_good_copy inner join wxb_good on wxb_good_copy.goods_id = wxb_good.good_id
+        inner join wxb_customer on wxb_good.customer_id = wxb_customer.customer_id
+        where wxb_customer.customer_id = #{customerId}
+    </select>
 </mapper>

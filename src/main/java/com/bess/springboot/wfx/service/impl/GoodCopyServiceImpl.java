@@ -26,6 +26,11 @@ public class GoodCopyServiceImpl implements GoodCopyService {
     private GoodDAO goodDAO;
 
     @Override
+    public int getCount(String customerId) {
+        return goodCopyDAO.getCount(customerId);
+    }
+
+    @Override
     public List<GoodCopy> listGoodCopyByPage(String customerId, int start, int size) {
         return goodCopyDAO.listGoodCopyByPage(customerId,start,size);
     }

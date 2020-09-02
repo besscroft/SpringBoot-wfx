@@ -4,10 +4,10 @@ Vue.component("leftnav-mem",{
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree" lay-filter="test">
 					<li class="layui-nav-item layui-nav-itemed">
-						<a class="" href="../bulletin.html">系统首页</a>
+						<a href="../bulletin.html" target="main_self_frame">系统首页</a>
 					</li>
 					<li class="layui-nav-item">
-						<a class="" href="javascript:;">产品及文案</a>
+						<a href="product_list.html" target="main_self_frame">产品及文案</a>
 					</li>
 					<li class="layui-nav-item">
 						<a href="javascript:;">特色推广</a>
@@ -15,24 +15,25 @@ Vue.component("leftnav-mem",{
 					<li class="layui-nav-item">
 						<a href="javascript:;">订单与结算</a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:;">我推广的订单</a></dd>
-							<dd><a href="javascript:;">结算与返款</a></dd>
-							<dd><a href="javascript:;">订单结算流水</a></dd>
+							<dd><a href="popularize_order.html" target="main_self_frame">我推广的订单</a></dd>
+							<dd><a href="record_order.html" target="main_self_frame">录单</a></dd>
+							<dd><a href="javascript:;" target="main_self_frame">结算与返款</a></dd>
+							<dd><a href="javascript:;" target="main_self_frame">订单结算流水</a></dd>
 						</dl>
 					</li>
 					<li class="layui-nav-item">
 						<a href="javascript:;">订单统计</a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:;">商品推广统计</a></dd>
-							<dd><a href="javascript:;">渠道推广统计</a></dd>
+							<dd><a href="javascript:;" target="main_self_frame">商品推广统计</a></dd>
+							<dd><a href="javascript:;" target="main_self_frame">渠道推广统计</a></dd>
 						</dl>
 					</li>
 					<li class="layui-nav-item">
 						<a href="javascript:;">资料设置</a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:;">渠道设置</a></dd>
-							<dd><a href="javascript:;">基本信息</a></dd>
-							<dd><a href="javascript:;">修改密码</a></dd>
+							<dd><a href="javascript:;" target="main_self_frame">渠道设置</a></dd>
+							<dd><a href="javascript:;" target="main_self_frame">基本信息</a></dd>
+							<dd><a href="javascript:;" target="main_self_frame">修改密码</a></dd>
 						</dl>
 					</li>
 				</ul>

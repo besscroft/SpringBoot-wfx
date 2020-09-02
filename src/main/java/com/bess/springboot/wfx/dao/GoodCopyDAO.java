@@ -14,4 +14,5 @@ public interface GoodCopyDAO {
     public int insertGoodCopy(GoodCopy goodCopy);   // 添加商品文案
     public int deleteGoodCopy(int copyId);   // 删除商品文案
     public int updateGoodCopy(GoodCopy goodCopy);   // 更新商品文案
+    public int getCount(String customerId); // 根据商户id查询所有的商品文案信息的数量
 }
