@@ -18,8 +18,8 @@ Vue.component("leftnav-cus",{
 					<li class="layui-nav-item">
 						<a href="javascript:;">订单管理</a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:;">全部订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">已下单订单</a></dd>
+							<dd><a href="order_list.html" target="main_self_frame">全部订单</a></dd>
+							<dd><a href="order_placed_list.html" target="main_self_frame">已下单订单</a></dd>
 							<dd><a href="javascript:;" target="main_self_frame">待跟进订单</a></dd>
 							<dd><a href="javascript:;" target="main_self_frame">待发货订单</a></dd>
 							<dd><a href="javascript:;" target="main_self_frame">已取消订单</a></dd>

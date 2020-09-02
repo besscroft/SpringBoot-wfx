@@ -21,14 +21,14 @@
 					<el-input v-model="copyContent"></el-input>
 				</el-form-item>
 				<el-form-item label="文案类型">
-					<el-select v-model="typeId" placeholder="请选择活动区域">
+					<el-select v-model="typeId" placeholder="请选择文案类型">
 						<el-option label="微信文案" value="0"></el-option>
 						<el-option label="站内文案" value="1"></el-option>
 						<el-option label="日志文案" value="2"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="商品">
-					<el-select v-model="goodId" placeholder="请选择活动区域">
+					<el-select v-model="goodId" placeholder="请选择商品">
 						<el-option v-for="item in goodData" :label="item.goodName" :value="item.goodId"></el-option>
 					</el-select>
 				</el-form-item>

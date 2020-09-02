@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace = 所需实现的接口全限定名-->
+<mapper namespace="com.bess.springboot.wfx.dao.OrderDAO">
+<!--    public List<Order> listOrderByCustomerId(@Param("customerId") String customerId,
+        @Param("start") int start,
+        @Param("size") int size);   // 根据商户id查询所有的订单信息-->
+    <resultMap id="orderMap" type="Order">
+        <id column="oid" property="oId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="buyer_phone" property="buyerPhone"/>
+        <result column="good_id" property="goodId"/>
+        <result column="order_time" property="orderTime"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="state" property="state"/>
+        <result column="buy_num" property="buyNum"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="buyer_reamrk" property="buyerReamrk"/>
+        <result column="pay_type" property="payType"/>
+        <result column="buyer_name" property="buyerName"/>
+        <result column="address" property="address"/>
+        <result column="courier_id" property="courierId"/>
+        <result column="order_remark" property="orderRemark"/>
+        <result column="sender_type" property="senderType"/>
+        <result column="order_type" property="orderType"/>
+        <result column="admin_remark" property="adminRemark"/>
+        <result column="operator" property="operator"/>
+        <result column="check_time" property="checkTime"/>
+        <result column="order_ip" property="orderIp"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="alipay_state" property="alipayState"/>
+        <result column="isfk" property="isfk"/>
+        <result column="kdzt" property="kdzt"/>
+        <result column="miaoshu" property="miaoshu"/>
+        <association property="goodSku" javaType="GoodSku">
+            <id column="sku_id" property="skuId"/>
+            <result column="sku_name" property="skuName"/>
+            <result column="sku_cost" property="skuCost"/>
+            <result column="sku_price" property="skuPrice"/>
+            <result column="sku_pmoney" property="skuPmoney"/>
+<!--            <result column="good_id" property="goodId"/>-->
+            <result column="order_no" property="orderNo"/>
+            <result column="order_no" property="serviceMoney"/>
+        </association>
+        <association property="memeber" javaType="Memeber">
+            <id column="mid" property="mid"/>
+            <result column="memeber_id" property="memeberId"/>
+<!--            <result column="account" property="account"/>-->
+<!--            <result column="qq_num" property="qqNum"/>-->
+<!--            <result column="email" property="email"/>-->
+<!--            <result column="phone" property="phone"/>-->
+<!--            <result column="recom_user" property="recomUser"/>-->
+<!--            <result column="register_time" property="registerTime"/>-->
+<!--            <result column="pay_account" property="payAccount"/>-->
+            <result column="name" property="name"/>
+<!--            <result column="password" property="password"/>-->
+<!--            <result column="visit_code" property="visitCode"/>-->
+<!--            <result column="use_recom" property="useRecom"/>-->
+<!--            <result column="level_code" property="levelCode"/>-->
+<!--            <result column="update_time" property="updateTime"/>-->
+        </association>
+    </resultMap>
+<!--    public List<Order> listOrderByCustomerId(@Param("customerId") String customerId,
+        @Param("start") int start,
+        @Param("size") int size);   // 根据商户id查询所有的订单信息-->
+    <select id="listOrderByCustomerId" resultSets="java.util.List" resultMap="orderMap">
+        select
+        wxb_order.oid,
+        wxb_order.order_id,
+        wxb_order.buyer_phone,
+        wxb_order.good_id,
+        wxb_order.order_time,
+        wxb_order.channel_id,
+        wxb_order.state,
+        wxb_order.buy_num,
+        wxb_order.province,
+        wxb_order.city,
+        wxb_order.area,
+        wxb_order.buyer_reamrk,
+        wxb_order.pay_type,
+        wxb_order.buyer_name,
+        wxb_order.address,
+        wxb_order.courier_id,
+        wxb_order.order_remark,
+        wxb_order.sender_type,
+        wxb_order.order_type,
+        wxb_order.admin_remark,
+        wxb_order.operator,
+        wxb_order.check_time,
+        wxb_order.order_ip,
+        wxb_order.update_time,
+        wxb_order.alipay_state,
+        wxb_order.isfk,
+        wxb_order.kdzt,
+        wxb_order.miaoshu,
+        wxb_memeber.mid,
+        wxb_memeber.memeber_id,
+        wxb_memeber.name,
+        wxb_good_sku.sku_id,
+        wxb_good_sku.sku_name,
+        wxb_good_sku.sku_cost,
+        wxb_good_sku.sku_price,
+        wxb_good_sku.sku_pmoney,
+        wxb_good_sku.order_no,
+        wxb_good_sku.service_money
+        from wxb_order
+        inner join wxb_memeber on wxb_order.user_id = wxb_memeber.memeber_id
+        inner join wxb_good_sku on wxb_order.sku_id = wxb_good_sku.sku_id
+        inner join wxb_good on wxb_order.good_id = wxb_good.good_id
+        where wxb_good.customer_id = #{customerId}
+        limit #{start},#{size}
+    </select>
+<!--    public List<Order> getOrderByOrderType(@Param("customerId") String customerId,
+        @Param("start") int start,
+        @Param("size") int size,
+        @Param("orderType") int orderType);   // 根据商户id查询所有的订单信息(orderType字段)-->
+    <select id="getOrderByOrderType" resultSets="java.util.List" resultMap="orderMap">
+        select
+        wxb_order.oid,
+        wxb_order.order_id,
+        wxb_order.buyer_phone,
+        wxb_order.good_id,
+        wxb_order.order_time,
+        wxb_order.channel_id,
+        wxb_order.state,
+        wxb_order.buy_num,
+        wxb_order.province,
+        wxb_order.city,
+        wxb_order.area,
+        wxb_order.buyer_reamrk,
+        wxb_order.pay_type,
+        wxb_order.buyer_name,
+        wxb_order.address,
+        wxb_order.courier_id,
+        wxb_order.order_remark,
+        wxb_order.sender_type,
+        wxb_order.order_type,
+        wxb_order.admin_remark,
+        wxb_order.operator,
+        wxb_order.check_time,
+        wxb_order.order_ip,
+        wxb_order.update_time,
+        wxb_order.alipay_state,
+        wxb_order.isfk,
+        wxb_order.kdzt,
+        wxb_order.miaoshu,
+        wxb_memeber.mid,
+        wxb_memeber.memeber_id,
+        wxb_memeber.name,
+        wxb_good_sku.sku_id,
+        wxb_good_sku.sku_name,
+        wxb_good_sku.sku_cost,
+        wxb_good_sku.sku_price,
+        wxb_good_sku.sku_pmoney,
+        wxb_good_sku.order_no,
+        wxb_good_sku.service_money
+        from wxb_order
+        inner join wxb_memeber on wxb_order.user_id = wxb_memeber.memeber_id
+        inner join wxb_good_sku on wxb_order.sku_id = wxb_good_sku.sku_id
+        inner join wxb_good on wxb_order.good_id = wxb_good.good_id
+        where wxb_good.customer_id = #{customerId}
+        <if test="orderType != null">
+            and wxb_order.order_type = #{orderType}
+        </if>
+        limit #{start},#{size}
+    </select>
+</mapper>

@@ -25,7 +25,7 @@ public class GoodCopy {
     @ApiModelProperty(value = "文案内容", dataType = "String", required = true)
     private String copyContent;
     private int orderNo;
-    private int typeId;
+    private String typeId;
     @ApiModelProperty(value = "商品id", dataType = "String", required = true)
     private String goodsId;
 }

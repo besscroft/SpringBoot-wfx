@@ -28,7 +28,7 @@ public class GoodCopyController {
     @Resource
     private GoodCopyService goodCopyService;
 
-    @RequestMapping("/list")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ApiOperation(value = "商品文案信息查询接口" , notes = "查询商品文案信息的接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "size", value = "每一页的数量", required = true, type = "int"),
@@ -55,11 +55,11 @@ public class GoodCopyController {
             @ApiImplicitParam(name = "copyTitle", value = "文案标题", required = true, type = "String"),
             @ApiImplicitParam(name = "copyLink", value = "文案链接", required = true, type = "String"),
             @ApiImplicitParam(name = "copyContent", value = "文案内容", required = true, type = "String"),
-            @ApiImplicitParam(name = "typeId", value = "文案类型", required = true, type = "int"),
+            @ApiImplicitParam(name = "typeId", value = "文案类型", required = true, type = "String"),
             @ApiImplicitParam(name = "goodsId", value = "商品id", required = true, type = "String"),
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
-    public ResultVO insertGoodCopy(String copyTitle,String copyLink,String copyContent,int typeId,String goodsId,@RequestHeader(required = true) String token) {
+    public ResultVO insertGoodCopy(String copyTitle,String copyLink,String copyContent,String typeId,String goodsId,@RequestHeader(required = true) String token) {
         boolean b = goodCopyService.insertGoodCopy(new GoodCopy(0,copyTitle,copyLink,copyContent,1,typeId,goodsId));
         if (b) {
             return new ResultVO(0,"添加成功",null);
@@ -90,11 +90,11 @@ public class GoodCopyController {
             @ApiImplicitParam(name = "copyTitle", value = "文案标题", required = true, type = "String"),
             @ApiImplicitParam(name = "copyLink", value = "文案链接", required = true, type = "String"),
             @ApiImplicitParam(name = "copyContent", value = "文案内容", required = true, type = "String"),
-            @ApiImplicitParam(name = "typeId", value = "文案类型", required = true, type = "int"),
+            @ApiImplicitParam(name = "typeId", value = "文案类型", required = true, type = "String"),
             @ApiImplicitParam(name = "goodsId", value = "商品id", required = true, type = "String"),
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
-    public ResultVO updateGoodCopy(int copyId,String copyTitle,String copyLink,String copyContent,int typeId,String goodsId,@RequestHeader(required = true) String token) {
+    public ResultVO updateGoodCopy(int copyId,String copyTitle,String copyLink,String copyContent,String typeId,String goodsId,@RequestHeader(required = true) String token) {
         boolean b = goodCopyService.updateGoodCopy(new GoodCopy(copyId, copyTitle, copyLink, copyContent, 1, typeId, goodsId));
         if (b) {
             return new ResultVO(0,"更新成功",null);

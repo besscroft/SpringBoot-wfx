@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../assets/layui/css/layui.css"/>
+	</head>
+	<body>
+		
+		<div id="container">
+			<template>
+				<el-table :data="tableData" height="540" border style="width: 100%">
+					<el-table-column prop="orderId" label="订单编号" width="180"></el-table-column>
+					<el-table-column prop="buyerPhone" label="买家电话"></el-table-column>
+					<el-table-column prop="orderTime" label="下单时间"></el-table-column>
+					<el-table-column prop="state" label="状态"></el-table-column>
+					<el-table-column prop="buyNum" label="购买数量"></el-table-column>
+					<el-table-column prop="province" label="省份"></el-table-column>
+					<el-table-column prop="city" label="市"></el-table-column>
+					<el-table-column prop="area" label="地区"></el-table-column>
+					<el-table-column prop="payType" label="支付方式"></el-table-column>
+					<el-table-column prop="buyerName" label="买家姓名"></el-table-column>
+					<el-table-column prop="goodSku.skuName" label="选择的套餐"></el-table-column>
+					<el-table-column prop="memeber.name" label="代理用户"></el-table-column>
+					<el-table-column prop="address" label="详细地址"></el-table-column>
+					<el-table-column prop="courierId" label="快递单号"></el-table-column>
+					<el-table-column prop="orderRemark" label="备注信息"></el-table-column>
+					<el-table-column prop="senderType" label="快递公司"></el-table-column>
+					<el-table-column label="订单状态">
+						<template slot-scope="scope">
+							<p v-if="scope.row.orderType=='0'">正常下单</p>
+							<p v-if="scope.row.orderType=='1'">代客录单</p>
+							<p v-if="scope.row.orderType=='2'">异常订单</p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="adminRemark" label="后台备注"></el-table-column>
+					<el-table-column prop="operator" label="审核人员"></el-table-column>
+					<el-table-column prop="checkTime" label="订单审核时间"></el-table-column>
+					<el-table-column prop="orderIp" label="下单ip"></el-table-column>
+					<el-table-column prop="updateTime" label="最后修改时间"></el-table-column>
+					<el-table-column label="支付宝支付状态">
+						<template slot-scope="scope">
+							<p v-if="scope.row.alipayState=='0'">未支付</p>
+							<p v-if="scope.row.alipayState=='1'">已支付</p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="isfk" label="是否付款">
+						<template slot-scope="scope">
+							<p v-if="scope.row.isfk=='0'">未支付</p>
+							<p v-if="scope.row.isfk=='1'">已支付</p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="miaoshu" label="描述"></el-table-column>
+					<el-table-column label="操作" fixed="right">
+						<template slot-scope="scope">
+							<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</template>
+			
+			<template>
+				<div class="block">
+					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+					:current-page="currentPage4" :pagesizes="[10, 50, 100, 400]" 
+					:pagesize="20" layout="total, sizes, prev, pager, next, jumper" :total="total">
+					</el-pagination>
+				</div>
+			</template>
+		</div>
+		
+	</body>
+	<script src="../assets/js/vue.js"></script>
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+	<script src="../assets/axios/axios.min.js"></script>
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:"#container",
+			data:{
+				tableData:[],
+				total: 100,
+				size: 1,
+				pagesize: 20
+			},
+			beforeMount:function(){
+				var tokenStr = "";
+				var str = document.cookie;
+				var arr = str.split(";");
+				for(var i=0;i<arr.length;i++){
+					var s = arr[i];
+					if(s.split("=")[0].trim() == "token"){
+						tokenStr = s.split("=")[1];
+						break;
+					}
+				}
+				axios({
+					method: 'get',
+					url: 'http://localhost:8080/order/listorderype',
+					headers: {'token': tokenStr},
+					params: {
+						size:10,
+						current:1,
+						orderType:0
+					}
+				}).then(function(res) {
+					console.log(res);
+					vm.tableData = res.data.data;
+					vm.total = res.data.data.length;
+				});
+			}
+		});
+	</script>
+</html>

@@ -136,7 +136,7 @@
 						<el-input v-model="updaterow.forwardLink"></el-input>
 					</el-form-item>
 					<el-form-item label="商品分类">
-						<el-select v-model="updaterow.typeId" placeholder="请选择活动区域">
+						<el-select v-model="updaterow.typeId" placeholder="请选择商品类别">
 							<el-option label="保健品" value="01"></el-option>
 							<el-option label="饰品" value="02"></el-option>
 							<el-option label="护肤品" value="03"></el-option>
@@ -201,7 +201,6 @@
 						break;
 					}
 				}
-				console.log(tokenStr);
 				axios({
 					method: 'get',
 					url: 'http://localhost:8080/good/listbyid',
