@@ -19,15 +19,15 @@ Vue.component("leftnav-cus",{
 						<a href="javascript:;">订单管理</a>
 						<dl class="layui-nav-child">
 							<dd><a href="order_list.html" target="main_self_frame">全部订单</a></dd>
-							<dd><a href="order_placed_list.html" target="main_self_frame">已下单订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">待跟进订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">待发货订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">已取消订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">已发货订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">已结算订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">已拒收订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">已签收订单</a></dd>
-							<dd><a href="javascript:;" target="main_self_frame">已退货订单</a></dd>
+							<dd><a href="order_state0_list.html" target="main_self_frame">已下单订单</a></dd>
+							<dd><a href="order_state1_list.html" target="main_self_frame">待跟进订单</a></dd>
+							<dd><a href="order_state2_list.html" target="main_self_frame">待发货订单</a></dd>
+							<dd><a href="order_state3_list.html" target="main_self_frame">已取消订单</a></dd>
+							<dd><a href="order_state4_list.html" target="main_self_frame">已发货订单</a></dd>
+							<dd><a href="order_state5_list.html" target="main_self_frame">已结算订单</a></dd>
+							<dd><a href="order_state6_list.html" target="main_self_frame">已拒收订单</a></dd>
+							<dd><a href="order_state7_list.html" target="main_self_frame">已签收订单</a></dd>
+							<dd><a href="order_state8_list.html" target="main_self_frame">已退货订单</a></dd>
 						</dl>
 					</li>
 					<li class="layui-nav-item">

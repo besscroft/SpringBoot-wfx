@@ -4,6 +4,7 @@ import com.bess.springboot.wfx.pojo.Order;
 import com.bess.springboot.wfx.service.OrderService;
 import com.bess.springboot.wfx.util.JWTUtil;
 import com.bess.springboot.wfx.vo.ResultGetVO;
+import com.bess.springboot.wfx.vo.ResultVO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.swagger.annotations.Api;
@@ -56,27 +57,34 @@ public class OrderController {
         }
     }
 
-//    @RequestMapping(value = "/listorderype", method = RequestMethod.GET)
-//    @ApiOperation(value = "订单信息查询接口" , notes = "查询全部”已下单“订单信息的接口，需要分页")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "size", value = "每一页的数量", required = true, type = "int"),
-//            @ApiImplicitParam(name = "current", value = "页码", required = true, type = "int"),
-//            @ApiImplicitParam(name = "orderType", value = "订单状态", required = true, type = "int"),
-//            @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
-//    })
-//    public ResultVO listOrderType(int size,int current,int orderType,@RequestHeader(required = true) String token) {
-//        int start = (current - 1) * size;   // 从第几行开始查
-//        // 验证token
-//        Jws<Claims> jws = JWTUtil.Decrypt(token);
-//        // 获取解析的token中的用户名、id等
-//        String customerId = jws.getBody().getId();
-//        List<Order> orders = orderService.getOrderByOrderType(customerId,start,size,orderType);
-//        if (orders != null) {
-//            return new ResultVO(0,"查询成功",orders);
-//        } else {
-//            return new ResultVO(1,"查询失败",null);
-//        }
-//    }
+    @RequestMapping(value = "/liststate", method = RequestMethod.GET)
+    @ApiOperation(value = "订单信息查询接口" , notes = "根据订单状态查询订单信息的接口，需要分页")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "每一页的数量", required = true, type = "int"),
+            @ApiImplicitParam(name = "current", value = "页码", required = true, type = "int"),
+            @ApiImplicitParam(name = "state", value = "订单状态", required = true, type = "int"),
+            @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
+    })
+    public ResultGetVO listOrderState(int size,int current,int state,@RequestHeader(required = true) String token) {
+        int start = (current - 1) * size;   // 从第几行开始查
+        // 验证token
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        // 获取解析的token中的用户名、id等
+        String customerId = jws.getBody().getId();
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            List<Order> orders = orderService.listOrderByState(customerId, state, start, size);
+            if (orders != null) {
+                int count = orderService.getCountByState(customerId, state);
+                return new ResultGetVO(0, "查询成功", count, orders);
+            } else {
+                return new ResultGetVO(1, "查询失败", 0, null);
+            }
+        } else {
+            return new ResultGetVO(1, "查询失败，权限校验未通过", 0, null);
+        }
+    }
 
     @RequestMapping(value = "/listmemeber", method = RequestMethod.GET)
     @ApiOperation(value = "订单信息查询接口" , notes = "查询全部自媒体用户订单信息的接口，需要分页")
@@ -103,6 +111,31 @@ public class OrderController {
             }
         } else {
             return new ResultGetVO(1, "查询失败，权限校验未通过", 0, null);
+        }
+    }
+
+    @RequestMapping(value = "/updatestate", method = RequestMethod.POST)
+    @ApiOperation(value = "订单状态修改接口" , notes = "修改订单状态的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId", value = "订单id", required = true, type = "String"),
+            @ApiImplicitParam(name = "state", value = "订单状态", required = true, type = "int"),
+            @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
+    })
+    public ResultVO updateState(String orderId,int state,@RequestHeader(required = true) String token) {
+        // 验证token
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        // 获取解析的token中的用户名、id等
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            boolean b = orderService.updateOrderState(orderId, state);
+            if (b) {
+                return new ResultVO(0, "更新成功", null);
+            } else {
+                return new ResultVO(1, "更新失败", null);
+            }
+        } else {
+            return new ResultVO(1, "查询失败，权限校验未通过", null);
         }
     }
 }

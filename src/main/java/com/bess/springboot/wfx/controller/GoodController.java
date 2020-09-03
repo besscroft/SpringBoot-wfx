@@ -210,7 +210,7 @@ public class GoodController {
         try {
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect("39.99.143.143",21);
-            boolean state = ftpClient.login("root", "密码");
+            boolean state = ftpClient.login("root", "abc123...");
             int replyCode = ftpClient.getReplyCode();
             System.out.println("replyCode:"+replyCode);
             // 如果响应码在200到299之间，表示与FTP站点的连接是成功的
