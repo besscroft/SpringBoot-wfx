@@ -37,11 +37,17 @@ public class GoodController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
-        List<Good> goods = goodService.listGoodById(customerId);
-        if (goods != null) {
-            return new ResultVO(0,"查询成功",goods);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            List<Good> goods = goodService.listGoodById(customerId);
+            if (goods != null) {
+                return new ResultVO(0, "查询成功", goods);
+            } else {
+                return new ResultVO(1, "查询失败", null);
+            }
         } else {
-            return new ResultVO(1,"查询失败",null);
+            return new ResultVO(1, "查询失败，权限校验未通过", null);
         }
     }
 
@@ -58,12 +64,18 @@ public class GoodController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
-        List<Good> goods = goodService.listGoodByCustomerId(customerId,start,size);
-        if (goods != null) {
-            int count = goodService.getCount(customerId);
-            return new ResultGetVO(0,"查询成功",count,goods);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            List<Good> goods = goodService.listGoodByCustomerId(customerId,start,size);
+            if (goods != null) {
+                int count = goodService.getCount(customerId);
+                return new ResultGetVO(0,"查询成功",count,goods);
+            } else {
+                return new ResultGetVO(1,"查询失败",0,null);
+            }
         } else {
-            return new ResultGetVO(1,"查询失败",0,null);
+            return new ResultGetVO(1,"查询失败，权限校验未通过",0,null);
         }
     }
 
@@ -84,12 +96,18 @@ public class GoodController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
-        Good good = new Good(RandomId.getNum(8),goodName,customerId,goodPic1,"","",promoteDesc,"wenan"+RandomId.getNum(10),copyDesc,forwardLink,2,new GoodType(typeId,"","","",0,""),"tags",0,new Date(),0,0,new Date(),new Date(),"","",0,website,kfqq);
-        boolean b = goodService.insertGood(good);
-        if (b) {
-            return new ResultVO(0,"添加成功",null);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            Good good = new Good(RandomId.getNum(8), goodName, customerId, goodPic1, "", "", promoteDesc, "wenan" + RandomId.getNum(10), copyDesc, forwardLink, 2, new GoodType(typeId, "", "", "", 0, ""), "tags", 0, new Date(), 0, 0, new Date(), new Date(), "", "", 0, website, kfqq);
+            boolean b = goodService.insertGood(good);
+            if (b) {
+                return new ResultVO(0, "添加成功", null);
+            } else {
+                return new ResultVO(1, "添加失败", null);
+            }
         } else {
-            return new ResultVO(1,"添加失败",null);
+            return new ResultVO(1, "添加失败，权限校验未通过", null);
         }
     }
 
@@ -101,10 +119,17 @@ public class GoodController {
     })
     public ResultVO deleteGood(String goodId,@RequestHeader(required = true) String token){
         boolean b = goodService.deleteGood(goodId);
-        if (b) {
-            return new ResultVO(0,"删除成功",null);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            if (b) {
+                return new ResultVO(0, "删除成功", null);
+            } else {
+                return new ResultVO(1, "删除失败", null);
+            }
         } else {
-            return new ResultVO(1,"删除失败",null);
+            return new ResultVO(1, "删除失败，权限校验未通过", null);
         }
     }
 
@@ -126,12 +151,18 @@ public class GoodController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
-        Good good = new Good(goodId,goodName,customerId,goodPic1,"","",promoteDesc,"wenan"+RandomId.getNum(10),copyDesc,forwardLink,2,new GoodType(typeId,"","","",0,""),"tags",0,new Date(),0,0,new Date(),new Date(),"","",0,website,kfqq);
-        boolean b = goodService.updateGood(good);
-        if (b) {
-            return new ResultVO(0,"更新成功",null);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            Good good = new Good(goodId, goodName, customerId, goodPic1, "", "", promoteDesc, "wenan" + RandomId.getNum(10), copyDesc, forwardLink, 2, new GoodType(typeId, "", "", "", 0, ""), "tags", 0, new Date(), 0, 0, new Date(), new Date(), "", "", 0, website, kfqq);
+            boolean b = goodService.updateGood(good);
+            if (b) {
+                return new ResultVO(0, "更新成功", null);
+            } else {
+                return new ResultVO(1, "更新失败", null);
+            }
         } else {
-            return new ResultVO(1,"更新失败",null);
+            return new ResultVO(1, "更新失败，权限校验未通过", null);
         }
     }
 
@@ -144,12 +175,19 @@ public class GoodController {
     })
     public ResultGetVO listGood(int size,int current,@RequestHeader(required = true) String token) {
         int start = (current - 1) * size;   // 从第几行开始查
-        List<Good> goods = goodService.listGood(start, size);
-        if (goods != null) {
-            int count = goodService.getCount(null);
-            return new ResultGetVO(0,"查询成功",count,goods);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("memeber".equals(issuer)) {
+            List<Good> goods = goodService.listGood(start, size);
+            if (goods != null) {
+                int count = goodService.getCount(null);
+                return new ResultGetVO(0, "查询成功", count, goods);
+            } else {
+                return new ResultGetVO(1, "查询失败", 0, null);
+            }
         } else {
-            return new ResultGetVO(1,"查询失败",0,null);
+            return new ResultGetVO(1, "查询失败，权限校验未通过", 0, null);
         }
     }
 }

@@ -37,7 +37,7 @@ public class CustomerController {
         Customer customer = customerService.login(username, password);
         if (customer != null) {
             // 登录成功后生成token
-            String token = JWTUtil.encrypt(customer.getLoginName(), customer.getCustomerId());
+            String token = JWTUtil.encrypt(customer.getLoginName(), customer.getCustomerId(),"customer");
             return new ResultVO(0,"登录成功",token);
         } else {
             // 登录失败
@@ -53,11 +53,17 @@ public class CustomerController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String name = jws.getBody().getSubject();
-        Customer customer = customerService.getCustomerByLoginName(name);
-        if (customer != null) {
-            return new ResultVO(0,"查询成功",customer);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            Customer customer = customerService.getCustomerByLoginName(name);
+            if (customer != null) {
+                return new ResultVO(0,"查询成功",customer);
+            } else {
+                return new ResultVO(1,"查询失败",null);
+            }
         } else {
-            return new ResultVO(1,"查询失败",null);
+            return new ResultVO(1,"查询失败，权限校验未通过",null);
         }
     }
 }

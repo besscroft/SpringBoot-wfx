@@ -27,11 +27,12 @@ public class JWTUtil {
      * @param id
      * @return
      */
-    public static String encrypt(String name,String id) {
+    public static String encrypt(String name,String id,String issuer) {
         // 登录成功后生成token
         String token = Jwts.builder()
                 .setSubject(name) // 设置名字
                 .setId(id)    // 设置id
+                .setIssuer(issuer)
                 .setIssuedAt(new Date()) // 设置token创建时间
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30 * 10)) // 设置过期时间
                 .signWith(SignatureAlgorithm.HS256, "fadj@Jq4$fka")  // 设置加密方式和密码

@@ -41,12 +41,18 @@ public class OrderController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
-        List<Order> orders = orderService.listOrderByCustomerId(customerId, start, size);
-        if (orders != null) {
-            int count = orderService.getCount(customerId, null);
-            return new ResultGetVO(0,"查询成功",count,orders);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            List<Order> orders = orderService.listOrderByCustomerId(customerId, start, size);
+            if (orders != null) {
+                int count = orderService.getCount(customerId, null);
+                return new ResultGetVO(0, "查询成功", count, orders);
+            } else {
+                return new ResultGetVO(1, "查询失败", 0, null);
+            }
         } else {
-            return new ResultGetVO(1,"查询失败",0,null);
+            return new ResultGetVO(1, "查询失败，权限校验未通过", 0, null);
         }
     }
 
@@ -85,12 +91,18 @@ public class OrderController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String memeberId = jws.getBody().getId();
-        List<Order> orders = orderService.getOrderByMemeber(memeberId,start,size);
-        if (orders != null) {
-            int count = orderService.getCount(null, memeberId);
-            return new ResultGetVO(0,"查询成功",count,orders);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("memeber".equals(issuer)) {
+            List<Order> orders = orderService.getOrderByMemeber(memeberId, start, size);
+            if (orders != null) {
+                int count = orderService.getCount(null, memeberId);
+                return new ResultGetVO(0, "查询成功", count, orders);
+            } else {
+                return new ResultGetVO(1, "查询失败", 0, null);
+            }
         } else {
-            return new ResultGetVO(1,"查询失败",0,null);
+            return new ResultGetVO(1, "查询失败，权限校验未通过", 0, null);
         }
     }
 }

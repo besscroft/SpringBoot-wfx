@@ -115,7 +115,7 @@
 			</template>
 			
 			<el-dialog
-				title="提示"
+				title="编辑商品信息"
 				:visible.sync="dialogVisibleUpdate"
 				width="30%"
 				:before-close="handleClose">
@@ -225,7 +225,9 @@
 					vm.typeIdNew = row.goodType.typeId;
 					vm.dialogVisibleUpdate = true;
 					vm.updateindex = index;
-					vm.updaterow = row;
+					
+					let obj = JSON.parse(JSON.stringify(row));
+					vm.updaterow = obj;
 				},
 				handleDelete:function(index,rows){
 					vm.pagesize = event;

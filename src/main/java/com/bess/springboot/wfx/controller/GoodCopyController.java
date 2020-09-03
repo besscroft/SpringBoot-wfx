@@ -42,12 +42,18 @@ public class GoodCopyController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
-        List<GoodCopy> goodCopies = goodCopyService.listGoodCopyByPage(customerId,start,size);
-        if (goodCopies != null) {
-            int count = goodCopyService.getCount(customerId);
-            return new ResultGetVO(0,"查询成功",count,goodCopies);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            List<GoodCopy> goodCopies = goodCopyService.listGoodCopyByPage(customerId, start, size);
+            if (goodCopies != null) {
+                int count = goodCopyService.getCount(customerId);
+                return new ResultGetVO(0, "查询成功", count, goodCopies);
+            } else {
+                return new ResultGetVO(1, "查询失败", 0, null);
+            }
         } else {
-            return new ResultGetVO(1,"查询失败",0,null);
+            return new ResultGetVO(1, "查询失败，权限校验未通过", 0, null);
         }
     }
 
@@ -62,11 +68,18 @@ public class GoodCopyController {
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
     public ResultVO insertGoodCopy(String copyTitle,String copyLink,String copyContent,String typeId,String goodsId,@RequestHeader(required = true) String token) {
-        boolean b = goodCopyService.insertGoodCopy(new GoodCopy(0,copyTitle,copyLink,copyContent,1,typeId,goodsId));
-        if (b) {
-            return new ResultVO(0,"添加成功",null);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            boolean b = goodCopyService.insertGoodCopy(new GoodCopy(0, copyTitle, copyLink, copyContent, 1, typeId, goodsId));
+            if (b) {
+                return new ResultVO(0, "添加成功", null);
+            } else {
+                return new ResultVO(1, "添加失败", null);
+            }
         } else {
-            return new ResultVO(1,"添加失败",null);
+            return new ResultVO(1, "添加失败，权限校验未通过", null);
         }
     }
 
@@ -77,11 +90,18 @@ public class GoodCopyController {
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
     public ResultVO deleteGoodCopy(int copyId,@RequestHeader(required = true) String token){
-        boolean b = goodCopyService.deleteGoodCopy(copyId);
-        if (b) {
-            return new ResultVO(0,"删除成功",null);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            boolean b = goodCopyService.deleteGoodCopy(copyId);
+            if (b) {
+                return new ResultVO(0, "删除成功", null);
+            } else {
+                return new ResultVO(1, "删除失败", null);
+            }
         } else {
-            return new ResultVO(1,"删除失败",null);
+            return new ResultVO(1, "删除失败，权限校验未通过", null);
         }
     }
 
@@ -97,11 +117,18 @@ public class GoodCopyController {
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
     public ResultVO updateGoodCopy(int copyId,String copyTitle,String copyLink,String copyContent,String typeId,String goodsId,@RequestHeader(required = true) String token) {
-        boolean b = goodCopyService.updateGoodCopy(new GoodCopy(copyId, copyTitle, copyLink, copyContent, 1, typeId, goodsId));
-        if (b) {
-            return new ResultVO(0,"更新成功",null);
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("customer".equals(issuer)) {
+            boolean b = goodCopyService.updateGoodCopy(new GoodCopy(copyId, copyTitle, copyLink, copyContent, 1, typeId, goodsId));
+            if (b) {
+                return new ResultVO(0, "更新成功", null);
+            } else {
+                return new ResultVO(1, "更新失败", null);
+            }
         } else {
-            return new ResultVO(1,"更新失败",null);
+            return new ResultVO(1, "更新失败，权限校验未通过", null);
         }
     }
 }

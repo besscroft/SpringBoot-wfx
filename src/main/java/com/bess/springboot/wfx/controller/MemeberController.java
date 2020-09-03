@@ -42,7 +42,7 @@ public class MemeberController {
         Memeber memeber = memeberService.login(username, password);
         if (memeber != null) {
             // 登录成功后生成token
-            String token = JWTUtil.encrypt(memeber.getAccount(), memeber.getMemeberId());
+            String token = JWTUtil.encrypt(memeber.getAccount(), memeber.getMemeberId(),"memeber");
             return new ResultVO(0,"登录成功",token);
         } else {
             // 登录失败
@@ -58,11 +58,17 @@ public class MemeberController {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String name = jws.getBody().getSubject();
-        Memeber memeber = memeberService.getMemeberByLoginName(name);
-        if (memeber != null) {
-            return new ResultVO(0,"查询成功",memeber);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("memeber".equals(issuer)) {
+            Memeber memeber = memeberService.getMemeberByLoginName(name);
+            if (memeber != null) {
+                return new ResultVO(0, "查询成功", memeber);
+            } else {
+                return new ResultVO(1, "查询失败", null);
+            }
         } else {
-            return new ResultVO(1,"查询失败",null);
+            return new ResultVO(1, "查询失败，权限校验未通过", null);
         }
     }
 
