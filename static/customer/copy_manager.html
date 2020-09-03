@@ -91,7 +91,8 @@
 				dialogVisible: false,
 				dialogVisibleUpdate: false,
 				updateindex:0,
-				updaterow:[]
+				updaterow:[],
+				token:""
 			},
 			beforeMount:function(){
 				var tokenStr = "";
@@ -104,6 +105,9 @@
 						break;
 					}
 				}
+				if (tokenStr === "") {
+					top.location = "../login.html";
+				}
 				axios({
 					method: 'get',
 					url: 'http://localhost:8080/goodcopy/list',
@@ -113,11 +117,12 @@
 						current:1
 					}
 				}).then(function(res) {
-					if (res.data === "认证失败") {
-						location.href = "../login.html";
+					if (res.data.code === 1) {
+						top.location = "../login.html";
 					}
 					vm.tableData = res.data.data;
 					vm.total = res.data.count;
+					vm.token = tokenStr;
 				});
 			},
 			methods:{
@@ -125,27 +130,17 @@
 					console.log("handleSizeChange");
 					console.log(event);
 					vm.pagesize = event;
-					var tokenStr = "";
-					var str = document.cookie;
-					var arr = str.split(";");
-					for(var i=0;i<arr.length;i++){
-						var s = arr[i];
-						if(s.split("=")[0].trim() == "token"){
-							tokenStr = s.split("=")[1];
-							break;
-						}
-					}
 					axios({
 						method: 'get',
 						url: 'http://localhost:8080/goodcopy/list',
-						headers: {'token': tokenStr},
+						headers: {'token': vm.token},
 						params: {
 							size:vm.pagesize,
 							current:1
 						}
 					}).then(function(res) {
-						if (res.data === "认证失败") {
-							location.href = "../login.html";
+						if (res.data.code === 1) {
+							top.location = "../login.html";
 						}
 						vm.tableData = res.data.data;
 						vm.total = res.data.count;
@@ -154,27 +149,17 @@
 				handleCurrentChange:function(event){
 					console.log("handleCurrentChange");
 					console.log(event);
-					var tokenStr = "";
-					var str = document.cookie;
-					var arr = str.split(";");
-					for(var i=0;i<arr.length;i++){
-						var s = arr[i];
-						if(s.split("=")[0].trim() == "token"){
-							tokenStr = s.split("=")[1];
-							break;
-						}
-					}
 					axios({
 						method: 'get',
 						url: 'http://localhost:8080/goodcopy/list',
-						headers: {'token': tokenStr},
+						headers: {'token': vm.token},
 						params: {
 							size:vm.pagesize,
 							current:event
 						}
 					}).then(function(res) {
-						if (res.data === "认证失败") {
-							location.href = "../login.html";
+						if (res.data.code === 1) {
+							top.location = "../login.html";
 						}
 						vm.tableData = res.data.data;
 						vm.total = res.data.count;
@@ -183,20 +168,11 @@
 				handleEdit:function(index,row){
 					vm.dialogVisibleUpdate = true;
 					vm.updateindex = index;
-					vm.updaterow = row;
+					let obj = JSON.parse(JSON.stringify(row));
+					vm.updaterow = obj;
 				},
 				handleDelete:function(index,rows){
 					vm.pagesize = event;
-					var tokenStr = "";
-					var str = document.cookie;
-					var arr = str.split(";");
-					for(var i=0;i<arr.length;i++){
-						var s = arr[i];
-						if(s.split("=")[0].trim() == "token"){
-							tokenStr = s.split("=")[1];
-							break;
-						}
-					}
 					vm.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -205,13 +181,13 @@
 						axios({
 							method: 'delete',
 							url: 'http://localhost:8080/goodcopy/delete',
-							headers: {'token': tokenStr},
+							headers: {'token': vm.token},
 							params: {
 								copyId:rows[index].copyId
 							}
 						}).then(function(res) {
-							if (res.data === "认证失败") {
-								location.href = "../login.html";
+							if (res.data.code === 1) {
+								top.location = "../login.html";
 							}
 							rows.splice(index, 1);
 							vm.$message({
@@ -228,20 +204,10 @@
 				},
 				updatesubmit:function(){
 					vm.dialogVisible = false;
-					var tokenStr = "";
-					var str = document.cookie;
-					var arr = str.split(";");
-					for(var i=0;i<arr.length;i++){
-						var s = arr[i];
-						if(s.split("=")[0].trim() == "token"){
-							tokenStr = s.split("=")[1];
-							break;
-						}
-					}
 					axios({
 						method: 'post',
 						url: 'http://localhost:8080/goodcopy/update',
-						headers: {'token': tokenStr},
+						headers: {'token': vm.token},
 						params: {
 							copyId: vm.updaterow.copyId,
 							copyTitle: vm.updaterow.copyTitle,
@@ -251,8 +217,8 @@
 							goodsId: vm.updaterow.goodsId
 						}
 					}).then(function(res) {
-						if (res.data === "认证失败") {
-							location.href = "../login.html";
+						if (res.data.code === 1) {
+							top.location = "../login.html";
 						}
 						if(res.data.code == 0){
 							vm.$message('更新成功');

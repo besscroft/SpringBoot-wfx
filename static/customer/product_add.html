@@ -14,8 +14,20 @@
 					<el-input v-model="goodName"></el-input>
 				</el-form-item>
 				<el-form-item label="商品图片">
-					<el-input v-model="goodPic1"></el-input>
+					<el-upload
+					  class="upload-demo"
+					  action="http://localhost:8080/good/upload"
+					  :on-preview="handlePreview"
+					  :on-remove="handleRemove"
+					  :file-list="fileList"
+					  :headers="headers"
+					  :on-success="handleSuccess"
+					  list-type="picture">
+					  <el-button size="small" type="primary">选择图片</el-button>
+					  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+					</el-upload>
 				</el-form-item>
+				<el-table-column prop="goodPic1" v-if="false"></el-table-column>
 				<el-form-item label="推广说明">
 					<el-input v-model="promoteDesc"></el-input>
 				</el-form-item>
@@ -68,7 +80,28 @@
 				forwardLink:"",
 				typeId:01,
 				website:"",
-				kfqq:88888888
+				kfqq:88888888,
+				fileList:[],
+				headers:{
+					token:""
+				}
+				
+			},
+			beforeMount:function(){
+				var tokenStr = "";
+				var str = document.cookie;
+				var arr = str.split(";");
+				for(var i=0;i<arr.length;i++){
+					var s = arr[i];
+					if(s.split("=")[0].trim() == "token"){
+						tokenStr = s.split("=")[1];
+						break;
+					}
+				}
+				if (tokenStr === "") {
+					top.location = "../login.html";
+				}
+				this.headers.token = tokenStr;
 			},
 			methods:{
 				onSubmit:function(res){
@@ -97,13 +130,23 @@
 							kfqq:vm.kfqq
 						}
 					}).then(function(res) {
-						if (res.data === "认证失败") {
-							location.href = "../login.html";
+						if (res.data.code === 1) {
+							top.location = "../login.html";
 						}
 						if(res.data.code == 0){
 							vm.$message('添加成功');
 						}
 					});
+				},
+				handleRemove:function(file, fileList) {
+					console.log(file, fileList);
+				},
+				handlePreview:function(file) {
+					console.log(file);
+				},
+				handleSuccess:function(response, file, fileList) {
+					console.log(response);
+					vm.goodPic1 = response.data;
 				}
 			}
 		});

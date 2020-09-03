@@ -1,6 +1,8 @@
 package com.bess.springboot.wfx.filter;
 
 import com.bess.springboot.wfx.util.JWTUtil;
+import com.bess.springboot.wfx.vo.ResultVO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 
 import javax.servlet.*;
@@ -50,7 +52,9 @@ public class JWTFilter implements Filter {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                response.getWriter().write("认证失败");
+                ResultVO vo = new ResultVO(1, "认证失败", null);
+                String s = new ObjectMapper().writeValueAsString(vo);
+                response.getWriter().write(s);
                 System.out.println("认证失败");
                 return;
             }

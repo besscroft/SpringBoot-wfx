@@ -54,7 +54,8 @@
 				copyContent:"",
 				typeId:01,
 				goodData:[],
-				goodId:""
+				goodId:"",
+				token:""
 			},
 			beforeMount:function(){
 				var tokenStr = "";
@@ -67,35 +68,27 @@
 						break;
 					}
 				}
-				console.log(tokenStr);
+				if (tokenStr === "") {
+					top.location = "../login.html";
+				}
 				axios({
 					method: 'get',
 					url: 'http://localhost:8080/good/list',
 					headers: {'token': tokenStr},
 				}).then(function(res) {
-					if (res.data === "认证失败") {
-						location.href = "../login.html";
+					if (res.data.code === 1) {
+						top.location = "../login.html";
 					}
 					vm.goodData = res.data.data;
-					// vm.total = res.data.data.length;
+					vm.token = tokenStr;
 				});
 			},
 			methods:{
 				onSubmit:function(res){
-					var tokenStr = "";
-					var str = document.cookie;
-					var arr = str.split(";");
-					for(var i=0;i<arr.length;i++){
-						var s = arr[i];
-						if(s.split("=")[0].trim() == "token"){
-							tokenStr = s.split("=")[1];
-							break;
-						}
-					}
 					axios({
 						method: 'put',
 						url: 'http://localhost:8080/goodcopy/insert',
-						headers: {'token': tokenStr},
+						headers: {'token': vm.token},
 						params: {
 							copyTitle: vm.copyTitle,
 							copyLink: vm.copyLink,
@@ -104,8 +97,8 @@
 							goodsId: vm.goodId
 						}
 					}).then(function(res) {
-						if (res.data === "认证失败") {
-							location.href = "../login.html";
+						if (res.data.code === 1) {
+							top.location = "../login.html";
 						}
 						if(res.data.code == 0){
 							vm.$message('添加成功');

@@ -65,7 +65,8 @@
 			el:"#container",
 			data:{
 				headname:"自媒体管理系统",
-				username:"admin"
+				username:"admin",
+				token:""
 			},
 			beforeMount:function(){
 				var tokenStr = "";
@@ -78,16 +79,19 @@
 						break;
 					}
 				}
-				console.log(tokenStr);
+				if (tokenStr === "") {
+					top.location = "../login.html";
+				}
 				axios({
 					method: 'get',
 					url: 'http://localhost:8080/memeber/info',
 					headers: {'token': tokenStr}
 				}).then(function(res) {
-					if (res.data === "认证失败") {
-						location.href = "../login.html";
+					if (res.data.code === 1) {
+						top.location = "../login.html";
 					}
 					vm.username = res.data.data.name;
+					vm.token = tokenStr;
 				});
 			},
 			methods:{
