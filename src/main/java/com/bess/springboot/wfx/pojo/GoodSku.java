@@ -22,4 +22,8 @@ public class GoodSku {
     private String goodId;
     private int orderNo;
     private String serviceMoney;
+
+    public GoodSku(String skuId) {
+        this.skuId = skuId;
+    }
 }

@@ -253,4 +253,10 @@
         set state = #{state}
         where order_id = #{orderId}
     </update>
+<!--    public int insertOrder(Order order);    // 录单-->
+    <insert id="insertOrder">
+        insert into
+        wxb_order(order_id,buyer_phone,good_id,order_time,channel_id,state,buy_num,province,city,area,buyer_reamrk,pay_type,buyer_name,sku_id,user_id,address,courier_id,order_remark,sender_type,order_type,admin_remark,operator,check_time,order_ip,update_time,alipay_state,isfk,kdzt,miaoshu)
+        values(#{orderId},#{buyerPhone},#{goodId},#{orderTime},#{channelId},#{state},#{buyNum},#{province},#{city},#{area},#{buyerReamrk},#{payType},#{buyerName},#{goodSku.skuId},#{memeber.memeberId},#{address},#{courierId},#{orderRemark},#{senderType},#{orderType},#{adminRemark},#{operator},#{checkTime},#{orderIp},#{updateTime},#{alipayState},#{isfk},#{kdzt},#{miaoshu})
+    </insert>
 </mapper>

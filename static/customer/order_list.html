@@ -16,7 +16,19 @@
 					<el-table-column prop="orderId" label="订单编号" width="180"></el-table-column>
 					<el-table-column prop="buyerPhone" label="买家电话"></el-table-column>
 					<el-table-column prop="orderTime" label="下单时间"></el-table-column>
-					<el-table-column prop="state" label="状态"></el-table-column>
+					<el-table-column label="状态">
+						<template slot-scope="scope">
+							<p v-if="scope.row.state=='0'">已下单</p>
+							<p v-if="scope.row.state=='1'">待跟进</p>
+							<p v-if="scope.row.state=='2'">待发货</p>
+							<p v-if="scope.row.state=='3'">已取消</p>
+							<p v-if="scope.row.state=='4'">已发货</p>
+							<p v-if="scope.row.state=='5'">已结算</p>
+							<p v-if="scope.row.state=='6'">已拒收</p>
+							<p v-if="scope.row.state=='7'">已签收</p>
+							<p v-if="scope.row.state=='8'">已退货</p>
+						</template>
+					</el-table-column>
 					<el-table-column prop="buyNum" label="购买数量"></el-table-column>
 					<el-table-column prop="province" label="省份"></el-table-column>
 					<el-table-column prop="city" label="市"></el-table-column>

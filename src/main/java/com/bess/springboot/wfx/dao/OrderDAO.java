@@ -26,4 +26,5 @@ public interface OrderDAO {
                                         @Param("size") int size);   // 根据商户id和订单状态查询所有的订单信息
     public int updateOrderState(@Param("orderId") String orderId,
                                 @Param("state") int state); // 根据订单id和state修改订单状态
+    public int insertOrder(Order order);    // 录单
 }

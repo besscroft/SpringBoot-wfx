@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace = 所需实现的接口全限定名-->
+<mapper namespace="com.bess.springboot.wfx.dao.AddressDAO">
+    <resultMap id="provinceMap" type="Province">
+        <id column="province_id" property="provinceId"/>
+        <result column="province_name" property="provinceName"/>
+    </resultMap>
+    <resultMap id="cityMap" type="City">
+        <id column="city_id" property="cityId"/>
+        <result column="city_name" property="cityName"/>
+        <result column="province_id" property="provinceId"/>
+        <result column="first_letter" property="firstLetter"/>
+        <result column="is_hot" property="isHot"/>
+        <result column="state" property="state"/>
+    </resultMap>
+    <resultMap id="regionMap" type="Region">
+        <id column="region_id" property="regionId"/>
+        <result column="region_name" property="regionName"/>
+        <result column="city_id" property="cityId"/>
+    </resultMap>
+<!--    public List<Province> listProvince();   // 查询所有的省份-->
+    <select id="listProvince" resultSets="java.util.List" resultMap="provinceMap">
+        select province_id,province_name from province
+    </select>
+<!--    public List<City> listCityByProvince(String provinceId); // 根据省份id查询城市-->
+    <select id="listCityByProvince" resultSets="java.util.List" resultMap="cityMap">
+        select city_id,city_name,province_id,first_letter,is_hot,state
+        from city where province_id = #{provinceId}
+    </select>
+<!--    public List<Region> listRegionByCity(String cityId);   // 根据城市id查区-->
+    <select id="listRegionByCity" resultSets="java.util.List" resultMap="regionMap">
+        select region_id,region_name,city_id
+        from region where city_id = #{cityId}
+    </select>
+<!--    public Province getProvince(String provinceId); // 根据省份id查省份信息-->
+    <select id="getProvince" resultMap="provinceMap">
+        select province_id,province_name from province
+        where province_id = #{provinceId}
+    </select>
+<!--    public City getCity(String cityId); // 根据城市id查询城市信息-->
+    <select id="getCity" resultMap="cityMap">
+        select city_id,city_name,province_id,first_letter,is_hot,state
+        from city
+        where city_id = #{cityId}
+    </select>
+<!--    public Region getRegion(String regionId); // 根据区id查询区信息-->
+    <select id="getRegion" resultMap="regionMap">
+        select region_id,region_name,city_id from region
+        where region_id = #{regionId}
+    </select>
+</mapper>

@@ -15,4 +15,5 @@ public interface OrderService {
     public int getCountByState(String customerId,int state);  // 根据id和状态查询所有的订单信息的数量
     public List<Order> listOrderByState(String customerId,int state,int start,int size);   // 根据商户id和订单状态查询所有的订单信息
     public boolean updateOrderState(String orderId,int state); // 根据订单id和state修改订单状态
+    public boolean insertOrder(Order order);    // 录单
 }

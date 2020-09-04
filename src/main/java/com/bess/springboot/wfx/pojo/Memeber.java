@@ -36,4 +36,8 @@ public class Memeber {
     private int useRecom;
     private String levelCode;
     private Date updateTime;
+
+    public Memeber(String memeberId) {
+        this.memeberId = memeberId;
+    }
 }

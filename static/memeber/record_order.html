@@ -12,40 +12,41 @@
 		<div id="container">
 			
 			<el-form label-width="80px">
-				<el-form-item label="商品名称">
-					<el-input v-model="goodName"></el-input>
+				<!-- <el-form-item label="商品名称(动态获取)">
+					<el-input v-model="goods.goodName"></el-input>
+				</el-form-item> -->
+				<el-form-item label="买家电话">
+					<el-input v-model="buyerPhone"></el-input>
 				</el-form-item>
-				<el-form-item label="商品图片">
-					<el-input v-model="goodPic1"></el-input>
+				<el-form-item label="购买数量">
+					<el-input v-model="buyNum"></el-input>
 				</el-form-item>
-				<el-form-item label="推广说明">
-					<el-input v-model="promoteDesc"></el-input>
-				</el-form-item>
-				<el-form-item label="文案说明">
-					<el-input v-model="copyDesc"></el-input>
-				</el-form-item>
-				<el-form-item label="跳转链接">
-					<el-input v-model="forwardLink"></el-input>
-				</el-form-item>
-				<el-form-item label="商品分类">
-					<el-select v-model="typeId" placeholder="请选择活动区域">
-						<el-option label="保健品" value="01"></el-option>
-						<el-option label="饰品" value="02"></el-option>
-						<el-option label="护肤品" value="03"></el-option>
-						<el-option label="床上用品" value="04"></el-option>
-						<el-option label="生活用品" value="05"></el-option>
-						<el-option label="减肥产品" value="06"></el-option>
-						<el-option label="零食" value="07"></el-option>
-						<el-option label="数码产品" value="08"></el-option>
-						<el-option label="编程类书籍" value="09"></el-option>
-						<el-option label="家电" value="10"></el-option>
+				<el-form-item label="省份">
+					<el-select v-model="province" placeholder="请选择省份" @change="provinceMethod">
+						<el-option v-for="item in provinceData" :label="item.provinceName" :value="item.provinceId" :key="item.provinceId"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="产品网址">
-					<el-input v-model="website"></el-input>
+				<el-form-item label="市">
+					<el-select v-model="city" placeholder="请选择城市" @change="cityMethod">
+						<el-option v-for="item in cityData" :label="item.cityName" :value="item.cityId" :key="item.cityId"></el-option>
+					</el-select>
 				</el-form-item>
-				<el-form-item label="客服QQ">
-					<el-input v-model="kfqq"></el-input>
+				<el-form-item label="地区">
+					<el-select v-model="region" placeholder="请选择区" @change="regionMethod">
+						<el-option v-for="item in regionData" :label="item.regionName" :value="item.regionId" :key="item.regionId"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="留言">
+					<el-input v-model="buyerReamrk"></el-input>
+				</el-form-item>
+				<el-form-item label="买家姓名">
+					<el-input v-model="buyerName"></el-input>
+				</el-form-item>
+				<el-form-item label="选择套餐">
+					<el-input v-model="goodSku"></el-input>
+				</el-form-item>
+				<el-form-item label="详细地址">
+					<el-input v-model="address"></el-input>
 				</el-form-item>
 				<el-form-item>
 				    <el-button type="primary" @click="onSubmit">立即添加</el-button>
@@ -65,7 +66,20 @@
 		var vm = new Vue({
 			el:"#container",
 			data:{
-				
+				// goods:[],
+				buyerPhone:"",
+				buyNum:1,
+				provinceData:[],
+				cityData:[],
+				regionData:[],
+				buyerReamrk:"",
+				buyerName:"",
+				goodSku:"",
+				address:"",
+				token:"",
+				province:"",
+				city:"",
+				region:""
 			},
 			beforeMount:function(){
 				var tokenStr = "";
@@ -80,6 +94,62 @@
 				}
 				if (tokenStr === "") {
 					top.location = "../login.html";
+				}
+				axios({
+					method: 'get',
+					url: 'http://localhost:8080/address/province',
+					headers: {'token': tokenStr},
+				}).then(function(res) {
+					console.log(res);
+					// if (res.data.code === 1) {
+					// 	top.location = "../login.html";
+					// }
+					vm.provinceData = res.data.data;
+				});
+				this.token = tokenStr;
+			},
+			methods:{
+				provinceMethod:function(){
+					console.log(vm.province);
+					axios({
+						method: 'get',
+						url: 'http://localhost:8080/address/city',
+						headers: {'token': vm.token},
+						params: {
+							provinceId: vm.province
+						}
+					}).then(function(res) {
+						console.log(res);
+						// if (res.data.code === 1) {
+						// 	top.location = "../login.html";
+						// }
+						vm.cityData = res.data.data;
+					});
+				},
+				cityMethod:function(){
+					console.log("city");
+					console.log(vm.city);
+					axios({
+						method: 'get',
+						url: 'http://localhost:8080/address/region',
+						headers: {'token': vm.token},
+						params: {
+							cityId: vm.city
+						}
+					}).then(function(res) {
+						console.log(res);
+						// if (res.data.code === 1) {
+						// 	top.location = "../login.html";
+						// }
+						vm.regionData = res.data.data;
+					});
+				},
+				regionMethod:function(){
+					console.log("region");
+					console.log(vm.region);
+				},
+				onSubmit:function(){
+					console.log("提交方法");
 				}
 			}
 		});

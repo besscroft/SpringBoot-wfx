@@ -16,7 +16,7 @@ Vue.component("leftnav-mem",{
 						<a href="javascript:;">订单与结算</a>
 						<dl class="layui-nav-child">
 							<dd><a href="popularize_order.html" target="main_self_frame">我推广的订单</a></dd>
-							<dd><a href="record_order.html" target="main_self_frame">录单</a></dd>
+							<!--<dd><a href="record_order.html" target="main_self_frame">录单</a></dd>-->
 							<dd><a href="javascript:;" target="main_self_frame">结算与返款</a></dd>
 							<dd><a href="javascript:;" target="main_self_frame">订单结算流水</a></dd>
 						</dl>

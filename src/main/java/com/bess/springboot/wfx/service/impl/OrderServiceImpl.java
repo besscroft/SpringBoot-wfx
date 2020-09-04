@@ -51,4 +51,9 @@ public class OrderServiceImpl implements OrderService {
     public boolean updateOrderState(String orderId, int state) {
         return orderDAO.updateOrderState(orderId,state) > 0;
     }
+
+    @Override
+    public boolean insertOrder(Order order) {
+        return orderDAO.insertOrder(order) > 0;
+    }
 }
