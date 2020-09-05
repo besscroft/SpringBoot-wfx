@@ -9,9 +9,15 @@
 
 ### 项目所用的技术栈
 
-| 名称   | 版本   |
-| ------ | ------ |
-| 待填充 | 待填充 |
+| 名称                                                         | 版本                                                  |
+| ------------------------------------------------------------ | ----------------------------------------------------- |
+| spring-boot-starter-parent                                   | 2.3.3.RELEASE                                         |
+| [Element](https://element.eleme.cn/#/zh-CN/component/installation) | 2.13.2                                                |
+| [axios](http://axios-js.com/zh-cn/docs/index.html)           |                                                       |
+| [Vue](https://cn.vuejs.org/v2/guide/)                        | v2.6.11                                               |
+| JWT                                                          |                                                       |
+| swagger2                                                     | 本地访问路径为：http://localhost:8080/swagger-ui.html |
+| 略                                                           |                                                       |
 
 
 ### 开发环境
