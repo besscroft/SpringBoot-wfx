@@ -10,6 +10,18 @@ spring:
       url: jdbc:mysql://localhost:3306/db_wfx?characterEncoding=UTF-8
       username: root
       password: 666666
+  redis:
+    host: 192.168.79.135
+    port: 6379
+    password: Redis@bess777
+    jedis:
+      pool:
+        min-idle: 30
+        max-wait: 1000
+        max-active: 8
+    database: 0
+    timeout: 100
+
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml
   type-aliases-package: com.bess.springboot.wfx.pojo
