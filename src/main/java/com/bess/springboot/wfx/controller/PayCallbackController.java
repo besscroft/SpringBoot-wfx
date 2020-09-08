@@ -47,7 +47,6 @@ public class PayCallbackController {
             String orderId = map.get("out_trade_no");
             boolean b = orderService.updateIsFK(orderId);
             if (b) {
-                System.out.println("修改【"+orderId+"】的状态为已支付");
                 //3. 推送消息到付款页面
                 WebSocket.sendMessage(orderId,"success");
                 //3.响应微信平台
