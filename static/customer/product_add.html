@@ -135,6 +135,9 @@
 						}
 						if(res.data.code == 0){
 							vm.$message('添加成功');
+							setTimeout(function () {
+								location.href = "product_add.html";
+							},2000);
 						}
 					});
 				},

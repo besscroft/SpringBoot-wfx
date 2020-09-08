@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<div id="d1">
+			<div id="qrcode" style="width:200px; height:200px; margin-top:15px;"></div>
+		</div>
+		
+	</body>
+	<script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../assets/js/qrcode.min.js"></script>
+	<script type="text/javascript">
+		var payUrl = localStorage.getItem("payUrl");
+		localStorage.removeItem("payUrl");
+		
+		var orderId = localStorage.getItem("orderId");
+		localStorage.removeItem("orderId");
+		
+		var qrcode = new QRCode(document.getElementById("qrcode"), {
+			width : 200,
+			height : 200
+		});
+		qrcode.makeCode(payUrl);
+		
+		//与服务器建立websocket连接（用于接收支付状态的提示）
+		//与付款成功的回调接口建立websocket连接
+		var websocket = null;
+		if('websocket' in window){
+		    //请求建立websocket连接
+		    websocket = new WebSocket("ws://localhost:8080/webSocket/"+orderId);
+		}
+		
+		websocket.onmessage = function(event){
+		    console.log("--------onmessage");
+		    if(event.data == "success"){
+		        $("#d1").html("<label style='color:green;font-size: 25px;'>支付成功！</label>");
+		    }
+		    websocket.close();
+			vm.$message('正在跳转回商家页面(订单页面)');
+			setTimeout(function () {
+				location.href = "popularize_order.html";
+			},2000);
+		}
+	</script>
+</html>

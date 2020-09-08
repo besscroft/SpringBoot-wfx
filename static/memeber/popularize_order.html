@@ -14,6 +14,14 @@
 			<template>
 				<el-table :data="tableData" height="540" border style="width: 100%">
 					<el-table-column prop="orderId" label="订单编号" width="180"></el-table-column>
+					<el-table-column label="是否付款" width="116">
+						<template slot-scope="scope">
+							<p v-if="scope.row.isfk==0">
+								<el-button @click="pay(scope.$index, scope.row)" type="primary">立即支付</el-button>
+							</p>
+							<p v-if="scope.row.isfk==1">已支付</p>
+						</template>
+					</el-table-column>
 					<el-table-column prop="buyerPhone" label="买家电话"></el-table-column>
 					<el-table-column prop="orderTime" label="下单时间"></el-table-column>
 					<el-table-column label="状态">
@@ -53,22 +61,16 @@
 					<el-table-column prop="checkTime" label="订单审核时间"></el-table-column>
 					<el-table-column prop="orderIp" label="下单ip"></el-table-column>
 					<el-table-column prop="updateTime" label="最后修改时间"></el-table-column>
-					<el-table-column label="支付宝支付状态">
+					<!-- <el-table-column label="支付宝支付状态">
 						<template slot-scope="scope">
 							<p v-if="scope.row.alipayState=='0'">未支付</p>
 							<p v-if="scope.row.alipayState=='1'">已支付</p>
 						</template>
-					</el-table-column>
-					<el-table-column prop="isfk" label="是否付款">
-						<template slot-scope="scope">
-							<p v-if="scope.row.isfk=='0'">未支付</p>
-							<p v-if="scope.row.isfk=='1'">已支付</p>
-						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column prop="miaoshu" label="描述"></el-table-column>
 					<el-table-column label="操作" fixed="right">
 						<template slot-scope="scope">
-							<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+							<el-button size="mini" type="danger" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -209,24 +211,26 @@
 				submitUpdate:function(){
 					vm.dialogVisible = false;
 					console.log(vm.updaterow.state);
-					// axios({
-					// 	method: 'post',
-					// 	url: 'http://localhost:8080/order/updatememeber',
-					// 	headers: {'token': vm.token},
-					// 	params: {
-					// 		orderId: vm.updaterow.orderId,
-					// 		state: vm.updaterow.state
-					// 	}
-					// }).then(function(res) {
-					// 	console.log(res);
-					// 	if (res.data.code === 1) {
-					// 		top.location = "../login.html";
-					// 	}
-					// 	if(res.data.code == 0){
-					// 		vm.$message('更新成功');
-					// 		location.href = "popularize_order.html";
-					// 	}
-					// });
+					axios({
+						method: 'post',
+						url: 'http://localhost:8080/order/updatememeber',
+						headers: {'token': vm.token},
+						params: {
+							orderId: vm.updaterow.orderId,
+							state: vm.updaterow.state
+						}
+					}).then(function(res) {
+						console.log(res);
+						if (res.data.code === 1) {
+							top.location = "../login.html";
+						}
+						if(res.data.code == 0){
+							vm.$message('更新成功');
+							setTimeout(function () {
+								location.href = "popularize_order.html";
+							},2000);
+						}
+					});
 				},
 				handleClose(done) {
 					this.$confirm('确认关闭？')
@@ -234,6 +238,29 @@
 						done();
 					})
 					.catch(_ => {});
+				},
+				pay:function(index,row){
+					axios({
+						method: 'post',
+						url: 'http://localhost:8080/order/pay',
+						headers: {'token': vm.token},
+						params: {
+							orderId: row.orderId,
+						}
+					}).then(function(res) {
+						console.log(res);
+						if (res.data.code === 1) {
+							top.location = "../login.html";
+						}
+						if(res.data.code == 0){
+							localStorage.setItem("payUrl",res.data.msg);
+							localStorage.setItem("orderId",res.data.data);
+							vm.$message('正在跳转微信支付页面');
+							setTimeout(function () {
+								location.href = "wxpay.html";
+							},2000);
+						}
+					});
 				}
 			}
 		});

@@ -16,4 +16,6 @@ public interface OrderService {
     public List<Order> listOrderByState(String customerId,int state,int start,int size);   // 根据商户id和订单状态查询所有的订单信息
     public boolean updateOrderState(String orderId,int state); // 根据订单id和state修改订单状态
     public boolean insertOrder(Order order);    // 录单
+    public String getOrderGoodNameByOrderIdAndMemeberId(String memeberId,String orderId);   // 根据自媒体用户id和订单id查询订单的商品名称
+    public boolean updateIsFK(String orderId);   // 根据订单id修改订单的付款状态
 }

@@ -259,4 +259,19 @@
         wxb_order(order_id,buyer_phone,good_id,order_time,channel_id,state,buy_num,province,city,area,buyer_reamrk,pay_type,buyer_name,sku_id,user_id,address,courier_id,order_remark,sender_type,order_type,admin_remark,operator,check_time,order_ip,update_time,alipay_state,isfk,kdzt,miaoshu)
         values(#{orderId},#{buyerPhone},#{goodId},#{orderTime},#{channelId},#{state},#{buyNum},#{province},#{city},#{area},#{buyerReamrk},#{payType},#{buyerName},#{goodSku.skuId},#{memeber.memeberId},#{address},#{courierId},#{orderRemark},#{senderType},#{orderType},#{adminRemark},#{operator},#{checkTime},#{orderIp},#{updateTime},#{alipayState},#{isfk},#{kdzt},#{miaoshu})
     </insert>
+<!--    public String getOrderGoodNameByOrderIdAndMemeberId(@Param("memeberId") String memeberId,
+        @Param("orderId") String orderId);   // 根据自媒体用户id和订单id查询订单信息-->
+    <select id="getOrderGoodNameByOrderIdAndMemeberId" resultType="String">
+        select
+        wxb_good.good_name
+        from wxb_order
+        inner join wxb_memeber on wxb_order.user_id = wxb_memeber.memeber_id
+        inner join wxb_good_sku on wxb_order.sku_id = wxb_good_sku.sku_id
+        inner join wxb_good on wxb_order.good_id = wxb_good.good_id
+        where wxb_memeber.memeber_id = #{memeberId} and wxb_order.order_id = #{orderId}
+    </select>
+<!--    public int updateIsFK(String orderId);   // 根据订单id修改订单的付款状态-->
+    <update id="updateIsFK">
+        update wxb_order set isfk = 1 where order_id = #{orderId}
+    </update>
 </mapper>

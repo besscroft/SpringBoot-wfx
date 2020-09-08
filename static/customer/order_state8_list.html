@@ -231,7 +231,9 @@
 						}
 						if(res.data.code == 0){
 							vm.$message('更新成功');
-							location.href = "order_state0_list.html";
+							setTimeout(function () {
+								location.href = "order_state8_list.html";
+							},2000);
 						}
 					});
 				},

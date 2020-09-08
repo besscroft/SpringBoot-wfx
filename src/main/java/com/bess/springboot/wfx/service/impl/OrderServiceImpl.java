@@ -3,6 +3,7 @@ package com.bess.springboot.wfx.service.impl;
 import com.bess.springboot.wfx.dao.OrderDAO;
 import com.bess.springboot.wfx.pojo.Order;
 import com.bess.springboot.wfx.service.OrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -156,6 +157,7 @@ public class OrderServiceImpl implements OrderService {
             stringRedisTemplate.delete("getOrderByMemeber");
             stringRedisTemplate.delete("getCountByState");
             stringRedisTemplate.delete("listOrderByState");
+            stringRedisTemplate.delete("getOrderGoodNameByOrderIdAndMemeberId");
             return true;
         }
         return false;
@@ -170,6 +172,44 @@ public class OrderServiceImpl implements OrderService {
             stringRedisTemplate.delete("getOrderByMemeber");
             stringRedisTemplate.delete("getCountByState");
             stringRedisTemplate.delete("listOrderByState");
+            stringRedisTemplate.delete("getOrderGoodNameByOrderIdAndMemeberId");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getOrderGoodNameByOrderIdAndMemeberId(String memeberId, String orderId) {
+        String goodName = null;
+        try {
+            String s = (String) stringRedisTemplate.boundHashOps("getOrderGoodNameByOrderIdAndMemeberId").get("order-" + memeberId + "-orderId-" + orderId);
+            if (s == null) {
+                synchronized (this) {
+                    s = (String) stringRedisTemplate.boundHashOps("getOrderGoodNameByOrderIdAndMemeberId").get("order-" + memeberId + "-orderId-" + orderId);
+                    if (s == null) {
+                        goodName = orderDAO.getOrderGoodNameByOrderIdAndMemeberId(memeberId, orderId);
+                        String jsonStr = mapper.writeValueAsString(goodName);
+                        stringRedisTemplate.boundHashOps("getOrderGoodNameByOrderIdAndMemeberId").put("order-" + memeberId + "-orderId-" + orderId,jsonStr);
+                    }
+                }
+            } else {
+                goodName = mapper.readValue(s, String.class);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return goodName;
+    }
+
+    @Override
+    public boolean updateIsFK(String orderId) {
+        int i = orderDAO.updateIsFK(orderId);
+        if (i > 0) {
+            stringRedisTemplate.delete("listOrderByCustomerId");
+            stringRedisTemplate.delete("getOrderByMemeber");
+            stringRedisTemplate.delete("getCountByState");
+            stringRedisTemplate.delete("listOrderByState");
+            stringRedisTemplate.delete("getOrderGoodNameByOrderIdAndMemeberId");
             return true;
         }
         return false;

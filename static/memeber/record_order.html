@@ -101,9 +101,9 @@
 					headers: {'token': tokenStr},
 				}).then(function(res) {
 					console.log(res);
-					// if (res.data.code === 1) {
-					// 	top.location = "../login.html";
-					// }
+					if (res.data.code === 1) {
+						top.location = "../login.html";
+					}
 					vm.provinceData = res.data.data;
 				});
 				this.token = tokenStr;
@@ -120,9 +120,9 @@
 						}
 					}).then(function(res) {
 						console.log(res);
-						// if (res.data.code === 1) {
-						// 	top.location = "../login.html";
-						// }
+						if (res.data.code === 1) {
+							top.location = "../login.html";
+						}
 						vm.cityData = res.data.data;
 					});
 				},
@@ -138,9 +138,9 @@
 						}
 					}).then(function(res) {
 						console.log(res);
-						// if (res.data.code === 1) {
-						// 	top.location = "../login.html";
-						// }
+						if (res.data.code === 1) {
+							top.location = "../login.html";
+						}
 						vm.regionData = res.data.data;
 					});
 				},

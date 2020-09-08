@@ -354,7 +354,9 @@
 						}
 						if(res.data.code == 0){
 							vm.$message('添加成功');
-							location.href = "product_list.html";
+							setTimeout(function () {
+								location.href = "product_list.html";
+							},2000);
 						}
 					});
 				},
@@ -388,7 +390,9 @@
 						}
 						if(res.data.code == 0){
 							vm.$message('更新成功');
-							location.href = "product_list.html";
+							setTimeout(function () {
+								location.href = "product_list.html";
+							},2000);
 						}
 					});
 				},

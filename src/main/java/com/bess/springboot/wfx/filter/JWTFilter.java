@@ -36,9 +36,10 @@ public class JWTFilter implements Filter {
         System.out.println("请求方式："+request.getMethod());
         System.out.println("请求资源："+request.getRequestURI());
         if (uri.endsWith("/customer/login") || uri.endsWith("/memeber/login")
-            || uri.contains("swagger-")||uri.contains("api-docs")
+            || uri.contains("swagger-")|| uri.contains("api-docs")
             || uri.contains("favicon") || "OPTIONS".equals(method)
-            || uri.endsWith("/memeber/register")) {
+            || uri.endsWith("/memeber/register") || uri.indexOf("/webSocket/")>=0
+            || uri.endsWith("/pay/callback")) {
             System.out.println("放行了");
             // 放行
             filterChain.doFilter(request,response);

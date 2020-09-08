@@ -27,4 +27,7 @@ public interface OrderDAO {
     public int updateOrderState(@Param("orderId") String orderId,
                                 @Param("state") int state); // 根据订单id和state修改订单状态
     public int insertOrder(Order order);    // 录单
+    public String getOrderGoodNameByOrderIdAndMemeberId(@Param("memeberId") String memeberId,
+                                               @Param("orderId") String orderId);   // 根据自媒体用户id和订单id查询订单的商品名称
+    public int updateIsFK(String orderId);   // 根据订单id修改订单的付款状态
 }

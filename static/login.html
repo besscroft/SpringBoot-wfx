@@ -30,10 +30,8 @@
 					<div class="grid-content bg-purple-dark">
 						
 						<el-menu
-						  :default-active="activeIndex2"
 						  class="el-menu-demo"
 						  mode="horizontal"
-						  @select="handleSelect"
 						  background-color="#545c64"
 						  text-color="#fff"
 						  active-text-color="#ffd04b">
@@ -66,8 +64,8 @@
 							    <el-form label-width="100px" class="demo-ruleForm">
 									<el-form-item label="登录选择">
 										<el-radio-group v-model="type">
-											<el-radio label="商户系统" value="0" @click.native="registno"></el-radio>
-											<el-radio label="自媒体系统" value="1" @click.native="registwow"></el-radio>
+											<el-radio label="0"  @click.native="registno">商户系统</el-radio>
+											<el-radio label="1"  @click.native="registwow">自媒体系统</el-radio>
 										</el-radio-group>
 									</el-form-item>
 									<el-form-item label="账号">
@@ -104,7 +102,7 @@
 			data:{
 				username: '',
 				password: '',
-				type: '',
+				type: '0',
 				time: new Date(),
 				visible: 'none'
 			},
@@ -116,7 +114,7 @@
 			},
 			methods: {
 			    submitForm() {
-					if(vm.type == "商户系统") {
+					if(vm.type == "0") {
 						axios({
 						  method: 'post',
 						  url: 'http://localhost:8080/customer/login',
@@ -130,7 +128,10 @@
 								var token = res.data.data;
 								document.cookie = "token="+token;
 								vm.$message('登录成功');
-								location.href="customer/home.html";
+								setTimeout(function () {
+									location.href="customer/home.html";
+								},2000);
+								
 							}else{
 								vm.$message('登录失败，请检查用户名或密码');
 							}
@@ -149,7 +150,9 @@
 								var token = res.data.data;
 								document.cookie = "token="+token;
 								vm.$message('登录成功');
-								location.href="memeber/home.html";
+								setTimeout(function () {
+									location.href="memeber/home.html";
+								},2000);
 							}else{
 								vm.$message('登录失败，请检查用户名或密码');
 							}
