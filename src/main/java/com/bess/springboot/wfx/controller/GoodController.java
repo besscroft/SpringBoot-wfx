@@ -93,18 +93,19 @@ public class GoodController {
             @ApiImplicitParam(name = "copyDesc", value = "文案说明", required = true, type = "String"),
             @ApiImplicitParam(name = "forwardLink", value = "跳转链接", required = true, type = "String"),
             @ApiImplicitParam(name = "typeId", value = "商品分类", required = true, type = "String"),
+            @ApiImplicitParam(name = "sellNum", value = "商品库存", required = true, type = "int"),
             @ApiImplicitParam(name = "website", value = "产品网址", required = true, type = "String"),
             @ApiImplicitParam(name = "kfqq", value = "客服QQ", required = true, type = "String"),
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
-    public ResultVO insertGood(String goodName,String goodPic1,String promoteDesc,String copyDesc,String forwardLink,String typeId,String website,String kfqq,@RequestHeader(required = true) String token) {
+    public ResultVO insertGood(String goodName,String goodPic1,String promoteDesc,String copyDesc,String forwardLink,String typeId,int sellNum,String website,String kfqq,@RequestHeader(required = true) String token) {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
         String issuer = jws.getBody().getIssuer();
         System.out.println("issuer:" + issuer);
         if ("customer".equals(issuer)) {
-            Good good = new Good(RandomId.getNum(8), goodName, customerId, goodPic1, "", "", promoteDesc, "wenan" + RandomId.getNum(10), copyDesc, forwardLink, 2, new GoodType(typeId, "", "", "", 0, ""), "tags", 0, new Date(), 0, 0, new Date(), new Date(), "", "", 0, website, kfqq);
+            Good good = new Good(RandomId.getNum(8), goodName, customerId, goodPic1, "", "", promoteDesc, "wenan" + RandomId.getNum(10), copyDesc, forwardLink, 2, new GoodType(typeId, "", "", "", 0, ""), "tags", 0, new Date(), 0, 0, new Date(), new Date(), "", "", sellNum, website, kfqq);
             boolean b = goodService.insertGood(good);
             if (b) {
                 return new ResultVO(0, "添加成功", null);
@@ -148,18 +149,19 @@ public class GoodController {
             @ApiImplicitParam(name = "copyDesc", value = "文案说明", required = true, type = "String"),
             @ApiImplicitParam(name = "forwardLink", value = "跳转链接", required = true, type = "String"),
             @ApiImplicitParam(name = "typeId", value = "商品分类", required = true, type = "String"),
+            @ApiImplicitParam(name = "sellNum", value = "商品库存", required = true, type = "int"),
             @ApiImplicitParam(name = "website", value = "产品网址", required = true, type = "String"),
             @ApiImplicitParam(name = "kfqq", value = "客服QQ", required = true, type = "String"),
             @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
     })
-    public ResultVO updateGood(String goodId,String goodName,String goodPic1,String promoteDesc,String copyDesc,String forwardLink,String typeId,String website,String kfqq,@RequestHeader(required = true) String token) {
+    public ResultVO updateGood(String goodId,String goodName,String goodPic1,String promoteDesc,String copyDesc,String forwardLink,String typeId,int sellNum,String website,String kfqq,@RequestHeader(required = true) String token) {
         Jws<Claims> jws = JWTUtil.Decrypt(token);
         // 获取解析的token中的用户名、id等
         String customerId = jws.getBody().getId();
         String issuer = jws.getBody().getIssuer();
         System.out.println("issuer:" + issuer);
         if ("customer".equals(issuer)) {
-            Good good = new Good(goodId, goodName, customerId, goodPic1, "", "", promoteDesc, "wenan" + RandomId.getNum(10), copyDesc, forwardLink, 2, new GoodType(typeId, "", "", "", 0, ""), "tags", 0, new Date(), 0, 0, new Date(), new Date(), "", "", 0, website, kfqq);
+            Good good = new Good(goodId, goodName, customerId, goodPic1, "", "", promoteDesc, "wenan" + RandomId.getNum(10), copyDesc, forwardLink, 2, new GoodType(typeId, "", "", "", 0, ""), "tags", 0, new Date(), 0, 0, new Date(), new Date(), "", "", sellNum, website, kfqq);
             boolean b = goodService.updateGood(good);
             if (b) {
                 return new ResultVO(0, "更新成功", null);

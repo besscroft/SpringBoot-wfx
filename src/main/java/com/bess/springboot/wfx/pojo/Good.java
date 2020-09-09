@@ -45,6 +45,7 @@ public class Good {
     private Date recomedTime;
     private String spcId;
     private String zonId;
+    @ApiModelProperty(value = "商品库存信息", dataType = "int", required = true)
     private int sellNum;
     private String website;
     private String kfqq;

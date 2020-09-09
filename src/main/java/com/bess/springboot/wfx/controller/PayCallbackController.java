@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.Map;
 
 /**
@@ -29,7 +31,7 @@ public class PayCallbackController {
 
     @RequestMapping(value = "/callback", method = RequestMethod.POST)
     @ApiOperation(value = "微信回调接口" , notes = "微信支付之后的回调接口")
-    public String callback(HttpServletRequest request) throws Exception {
+    public void callback(HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("-------------callback");
         //1.接收微信返回的支付状态
         ServletInputStream inputStream = request.getInputStream();
@@ -50,7 +52,7 @@ public class PayCallbackController {
                 //3. 推送消息到付款页面
                 WebSocket.sendMessage(orderId,"success");
                 //3.响应微信平台
-                return "<xml>" +
+                String str =  "<xml>" +
                         "   <return_code><![CDATA["+map.get("return_code")+"]]></return_code>" +
                         "   <return_msg><![CDATA[OK]]></return_msg>" +
                         "   <appid><![CDATA["+map.get("appid")+"]]></appid>" +
@@ -62,11 +64,13 @@ public class PayCallbackController {
                         "  <prepay_id><![CDATA[wx201411101639507cbf6ffd8b0779950874]]></prepay_id>" +
                         "   <trade_type><![CDATA["+map.get("trade_type")+"]]></trade_type>" +
                         "</xml>";
+                PrintWriter out = response.getWriter();
+                out.println(str);
+                out.flush();
+                out.close();
             } else {
-                return "";
             }
         }
-        return "";
     }
 
 }

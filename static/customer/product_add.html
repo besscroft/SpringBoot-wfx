@@ -51,6 +51,9 @@
 						<el-option label="家电" value="10"></el-option>
 					</el-select>
 				</el-form-item>
+				<el-form-item label="商品库存">
+					<el-input v-model="sellNum"></el-input>
+				</el-form-item>
 				<el-form-item label="产品网址">
 					<el-input v-model="website"></el-input>
 				</el-form-item>
@@ -81,6 +84,7 @@
 				typeId:01,
 				website:"",
 				kfqq:88888888,
+				sellNum:1,
 				fileList:[],
 				headers:{
 					token:""
@@ -127,7 +131,8 @@
 							forwardLink:vm.forwardLink,
 							typeId:vm.typeId,
 							website:vm.website,
-							kfqq:vm.kfqq
+							kfqq:vm.kfqq,
+							sellNum:vm.sellNum
 						}
 					}).then(function(res) {
 						if (res.data.code === 1) {

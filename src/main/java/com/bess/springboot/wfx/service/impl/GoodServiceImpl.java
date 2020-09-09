@@ -103,6 +103,7 @@ public class GoodServiceImpl implements GoodService {
             stringRedisTemplate.delete("listGoodByCustomerId");
             stringRedisTemplate.delete("listGoodById");
             stringRedisTemplate.delete("listGood");
+            stringRedisTemplate.delete("getSellNum");
             return true;
         }
         return false;
@@ -117,7 +118,7 @@ public class GoodServiceImpl implements GoodService {
             stringRedisTemplate.delete("listGoodByCustomerId");
             stringRedisTemplate.delete("listGoodById");
             stringRedisTemplate.delete("listGood");
-            System.out.println("Redis更新成功");
+            stringRedisTemplate.delete("getSellNum");
             return true;
         }
         return false;
@@ -155,6 +156,7 @@ public class GoodServiceImpl implements GoodService {
             stringRedisTemplate.delete("listGoodByCustomerId");
             stringRedisTemplate.delete("listGoodById");
             stringRedisTemplate.delete("listGood");
+            stringRedisTemplate.delete("getSellNum");
             return true;
         }
         return false;
@@ -182,5 +184,41 @@ public class GoodServiceImpl implements GoodService {
             e.printStackTrace();
         }
         return goods;
+    }
+
+    @Override
+    public int getSellNum(String goodId) {
+        int num = 0;
+        try {
+            String s = (String) stringRedisTemplate.boundHashOps("getSellNum").get("num-" + goodId);
+            if (s == null) {
+                synchronized (this) {
+                    s = (String) stringRedisTemplate.boundHashOps("getSellNum").get("num-" + goodId);
+                    if (s == null) {
+                        num = goodDAO.getSellNum(goodId);
+                        String jsonStr = mapper.writeValueAsString(num);
+                        stringRedisTemplate.boundHashOps("getSellNum").put("num-" + goodId,jsonStr);
+                    }
+                }
+            } else {
+                num = mapper.readValue(s, Integer.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return num;
+    }
+
+    @Override
+    public boolean updateSellNum(String goodId, int num) {
+        int i = goodDAO.updateSellNum(goodId, num);
+        if (i > 0) {
+            stringRedisTemplate.delete("listGoodByCustomerId");
+            stringRedisTemplate.delete("listGoodById");
+            stringRedisTemplate.delete("listGood");
+            stringRedisTemplate.delete("getSellNum");
+            return true;
+        }
+        return false;
     }
 }
