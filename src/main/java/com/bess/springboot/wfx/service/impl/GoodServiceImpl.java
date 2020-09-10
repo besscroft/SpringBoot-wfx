@@ -210,6 +210,7 @@ public class GoodServiceImpl implements GoodService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public boolean updateSellNum(String goodId, int num) {
         int i = goodDAO.updateSellNum(goodId, num);
         if (i > 0) {

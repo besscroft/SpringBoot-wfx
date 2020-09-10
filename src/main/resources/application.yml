@@ -21,6 +21,12 @@ spring:
         max-active: 8
     database: 0
     timeout: 100
+redisson:
+  addr:
+    singleAddr:
+      host: redis://192.168.79.135:6379
+      password: Redis@bess777
+      database: 0
 
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml

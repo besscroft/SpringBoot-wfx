@@ -15,6 +15,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,9 @@ public class OrderController {
 
     @Resource
     private DefaultRedisScript<List> defaultRedisScript;
+
+    @Resource
+    private RedissonClient redissonClient;
 
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     @ApiOperation(value = "订单信息查询接口" , notes = "查询全部订单信息的接口，需要分页")
@@ -205,11 +210,14 @@ public class OrderController {
         String issuer = jws.getBody().getIssuer();
         System.out.println("issuer:" + issuer);
         if ("memeber".equals(issuer)) {
-            String uuid = UUID.randomUUID().toString();
-            Boolean flag = stringRedisTemplate.boundValueOps("goodId-" + goodId).setIfAbsent(uuid,30, TimeUnit.SECONDS);
-            while (!flag) {
-                flag = stringRedisTemplate.boundValueOps("goodId-" + goodId).setIfAbsent(uuid,30, TimeUnit.SECONDS);
-            }
+//            String uuid = UUID.randomUUID().toString();
+//            Boolean flag = stringRedisTemplate.boundValueOps("goodId-" + goodId).setIfAbsent(uuid,30, TimeUnit.SECONDS);
+//            while (!flag) {
+//                flag = stringRedisTemplate.boundValueOps("goodId-" + goodId).setIfAbsent(uuid,30, TimeUnit.SECONDS);
+//            }
+            String lockKey = goodId + "-LOCK";
+            RLock lock = redissonClient.getLock(lockKey);
+            lock.lock();
             try {
                 int sellNum = goodService.getSellNum(goodId);
                 if (buyNum < sellNum) {
@@ -229,11 +237,12 @@ public class OrderController {
                     return new ResultVO(1, "商品库存不足，录单失败", null);
                 }
             } finally {
-                // 4.释放锁  调用lua
-                List<String> keys = new ArrayList<>();
-                keys.add("goodId-" + goodId);
-                List rs = stringRedisTemplate.execute(defaultRedisScript, keys, uuid);
-                System.out.println("~~~~~~~~~~~~~~~~~"+rs.get(0));
+//                // 4.释放锁  调用lua
+//                List<String> keys = new ArrayList<>();
+//                keys.add("goodId-" + goodId);
+//                List rs = stringRedisTemplate.execute(defaultRedisScript, keys, uuid);
+//                System.out.println("~~~~~~~~~~~~~~~~~"+rs.get(0));
+                lock.unlock();
             }
 
         } else {
