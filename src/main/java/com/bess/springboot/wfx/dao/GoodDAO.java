@@ -23,4 +23,7 @@ public interface GoodDAO {
                               @Param("goodId") String goodId);  // 添加文案后，对商品的文案关联信息更新
     public List<Good> listGood(@Param("start") int start,
                                @Param("size") int size);   // 查询所有的商品信息
+    public int getSellNum(String goodId);   // 根据商品id查询商品库存
+    public int updateSellNum(@Param("goodId") String goodId,
+                             @Param("num") int num);    // 根据商品id修改库存
 }

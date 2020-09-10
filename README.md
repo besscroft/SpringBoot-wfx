@@ -17,7 +17,7 @@
 | [Vue](https://cn.vuejs.org/v2/guide/)                        | v2.6.11                                               |
 | JWT                                                          |                                                       |
 | swagger2                                                     | 本地访问路径为：http://localhost:8080/swagger-ui.html |
-| 略                                                           |                                                       |
+| [Redis](http://www.redis.cn/)                                | 6.0.6                                                 |
 
 
 ### 开发环境

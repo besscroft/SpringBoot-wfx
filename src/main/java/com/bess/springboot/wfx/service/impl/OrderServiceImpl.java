@@ -164,6 +164,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public boolean insertOrder(Order order) {
         int i = orderDAO.insertOrder(order);
         if (i > 0) {
@@ -202,6 +203,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
     public boolean updateIsFK(String orderId) {
         int i = orderDAO.updateIsFK(orderId);
         if (i > 0) {

@@ -105,7 +105,7 @@
 							<p v-if="scope.row.recomed=='1'">是</p>
 						</template>
 					</el-table-column>
-					<el-table-column prop="sellNum" label="作弊值"></el-table-column>
+					<el-table-column prop="sellNum" label="库存"></el-table-column>
 					<el-table-column prop="website" label="产品网址"></el-table-column>
 					<el-table-column prop="kfqq" label="客服QQ"></el-table-column>
 					<el-table-column label="操作" fixed="right">
@@ -173,6 +173,9 @@
 							<el-option label="家电" value="10"></el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="商品库存">
+						<el-input v-model="updaterow.sellNum"></el-input>
+					</el-form-item>
 					<el-form-item label="产品网址">
 						<el-input v-model="updaterow.website"></el-input>
 					</el-form-item>
@@ -215,6 +218,7 @@
 				website:"",
 				kfqq:88888888,
 				typeIdNew:01,
+				sellNum:0,
 				token:"",
 				headers:{
 					token:""
@@ -382,7 +386,8 @@
 							forwardLink:vm.updaterow.forwardLink,
 							typeId:vm.typeIdNew,
 							website:vm.updaterow.website,
-							kfqq:vm.updaterow.kfqq
+							kfqq:vm.updaterow.kfqq,
+							sellNum:vm.updaterow.sellNum
 						}
 					}).then(function(res) {
 						if (res.data.code === 1) {

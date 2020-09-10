@@ -3,6 +3,7 @@ package com.bess.springboot.wfx.controller;
 import com.bess.springboot.wfx.config.MyConfig;
 import com.bess.springboot.wfx.pojo.*;
 import com.bess.springboot.wfx.service.AddressService;
+import com.bess.springboot.wfx.service.GoodService;
 import com.bess.springboot.wfx.service.OrderService;
 import com.bess.springboot.wfx.util.JWTUtil;
 import com.bess.springboot.wfx.vo.ResultGetVO;
@@ -14,10 +15,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Bess Croft
@@ -33,7 +39,19 @@ public class OrderController {
     private OrderService orderService;
 
     @Resource
+    private GoodService goodService;
+
+    @Resource
     private AddressService addressService;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private DefaultRedisScript<List> defaultRedisScript;
+
+    @Resource
+    private RedissonClient redissonClient;
 
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     @ApiOperation(value = "订单信息查询接口" , notes = "查询全部订单信息的接口，需要分页")
@@ -192,16 +210,41 @@ public class OrderController {
         String issuer = jws.getBody().getIssuer();
         System.out.println("issuer:" + issuer);
         if ("memeber".equals(issuer)) {
-            Province province1 = addressService.getProvince(province);
-            City city1 = addressService.getCity(city);
-            Region region1 = addressService.getRegion(region);
-            Order order = new Order(0, UUID.randomUUID().toString().replace("-",""),buyerPhone,goodId,new Date(),"123",0,buyNum,province1.getProvinceName(),city1.getCityName(),region1.getRegionName(),buyerReamrk,1,buyerName,new GoodSku("sku41700"),new Memeber(memeberId),address,"sf20200904","等待卖家发货","顺丰速运",0,"备注","审核员1",new Date(),"192.168.0.1",new Date(),"1",0,0,"新订单");
-            boolean b = orderService.insertOrder(order);
-            if (b) {
-                return new ResultVO(0, "录单成功", null);
-            } else {
-                return new ResultVO(1, "录单失败", null);
+//            String uuid = UUID.randomUUID().toString();
+//            Boolean flag = stringRedisTemplate.boundValueOps("goodId-" + goodId).setIfAbsent(uuid,30, TimeUnit.SECONDS);
+//            while (!flag) {
+//                flag = stringRedisTemplate.boundValueOps("goodId-" + goodId).setIfAbsent(uuid,30, TimeUnit.SECONDS);
+//            }
+            String lockKey = goodId + "-LOCK";
+            RLock lock = redissonClient.getLock(lockKey);
+            lock.lock();
+            try {
+                int sellNum = goodService.getSellNum(goodId);
+                if (buyNum < sellNum) {
+                    Province province1 = addressService.getProvince(province);
+                    City city1 = addressService.getCity(city);
+                    Region region1 = addressService.getRegion(region);
+                    Order order = new Order(0, UUID.randomUUID().toString().replace("-",""),buyerPhone,goodId,new Date(),"123",0,buyNum,province1.getProvinceName(),city1.getCityName(),region1.getRegionName(),buyerReamrk,1,buyerName,new GoodSku("sku41700"),new Memeber(memeberId),address,"sf20200904","等待卖家发货","顺丰速运",0,"备注","审核员1",new Date(),"192.168.0.1",new Date(),"1",0,0,"新订单");
+                    boolean b = orderService.insertOrder(order);
+                    // 录单之后修改库存
+                    boolean b1 = goodService.updateSellNum(goodId, buyNum);
+                    if (b && b1) {
+                        return new ResultVO(0, "录单成功", null);
+                    } else {
+                        return new ResultVO(1, "录单失败", null);
+                    }
+                } else {
+                    return new ResultVO(1, "商品库存不足，录单失败", null);
+                }
+            } finally {
+//                // 4.释放锁  调用lua
+//                List<String> keys = new ArrayList<>();
+//                keys.add("goodId-" + goodId);
+//                List rs = stringRedisTemplate.execute(defaultRedisScript, keys, uuid);
+//                System.out.println("~~~~~~~~~~~~~~~~~"+rs.get(0));
+                lock.unlock();
             }
+
         } else {
             return new ResultVO(1, "查询失败，权限校验未通过", null);
         }

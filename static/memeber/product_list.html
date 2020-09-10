@@ -43,7 +43,7 @@
 							<p v-if="scope.row.recomed=='1'">是</p>
 						</template>
 					</el-table-column>
-					<el-table-column prop="sellNum" label="作弊值"></el-table-column>
+					<el-table-column prop="sellNum" label="库存"></el-table-column>
 					<el-table-column prop="website" label="产品网址"></el-table-column>
 					<el-table-column prop="kfqq" label="客服QQ"></el-table-column>
 					<el-table-column fixed="right" width="150px" :data="filterData">
@@ -330,7 +330,6 @@
 					console.log(vm.region);
 				},
 				onSubmit:function(){
-					console.log("提交方法");
 					axios({
 						method: 'post',
 						url: 'http://localhost:8080/order/insertorder',
@@ -350,7 +349,7 @@
 						if (res.data.code === 0) {
 							vm.$message('录单成功！');
 							setTimeout(function () {
-								location.href = "product_list.html";
+								location.href = "popularize_order.html";
 							},2000);
 						}
 						if (res.data.code === 1) {
