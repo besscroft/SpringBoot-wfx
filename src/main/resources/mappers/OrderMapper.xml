@@ -159,6 +159,7 @@
         inner join wxb_good_sku on wxb_order.sku_id = wxb_good_sku.sku_id
         inner join wxb_good on wxb_order.good_id = wxb_good.good_id
         where wxb_memeber.memeber_id = #{memeberId}
+        order by wxb_order.isfk
         limit #{start},#{size}
     </select>
 <!--    public int getCount(@Param("customerId") String customerId,

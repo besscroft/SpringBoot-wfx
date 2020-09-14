@@ -6,6 +6,13 @@ import com.bess.springboot.wfx.service.GoodService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -13,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -29,6 +37,11 @@ public class GoodServiceImpl implements GoodService {
     private StringRedisTemplate stringRedisTemplate;
 
     private ObjectMapper mapper = new ObjectMapper();
+
+    @Resource
+    private RestHighLevelClient restHighLevelClient;
+
+    private Client client;
 
     @Override
     public int getCount(String customerId) {
@@ -89,6 +102,18 @@ public class GoodServiceImpl implements GoodService {
             stringRedisTemplate.delete("listGoodByCustomerId");
             stringRedisTemplate.delete("listGoodById");
             stringRedisTemplate.delete("listGood");
+            // 添加商品后增加es搜索引擎的数据
+            try {
+                String jsonStr = mapper.writeValueAsString(good);
+                IndexRequest request = new IndexRequest("wxbgood");
+                request.id(good.getGoodId());
+                request.source(jsonStr, XContentType.JSON);
+                IndexResponse indexResponse = restHighLevelClient.index(request, RequestOptions.DEFAULT);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         return false;
@@ -104,6 +129,8 @@ public class GoodServiceImpl implements GoodService {
             stringRedisTemplate.delete("listGoodById");
             stringRedisTemplate.delete("listGood");
             stringRedisTemplate.delete("getSellNum");
+            // 商品删除后删除索引
+            DeleteResponse response = client.prepareDelete("wxbgood", "_doc", goodId).execute().actionGet();
             return true;
         }
         return false;
@@ -119,6 +146,7 @@ public class GoodServiceImpl implements GoodService {
             stringRedisTemplate.delete("listGoodById");
             stringRedisTemplate.delete("listGood");
             stringRedisTemplate.delete("getSellNum");
+            // 更新数据后更新es
             return true;
         }
         return false;
