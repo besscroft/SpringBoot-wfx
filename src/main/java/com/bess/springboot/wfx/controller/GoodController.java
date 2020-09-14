@@ -2,6 +2,7 @@ package com.bess.springboot.wfx.controller;
 
 import com.bess.springboot.wfx.pojo.Good;
 import com.bess.springboot.wfx.pojo.GoodType;
+import com.bess.springboot.wfx.service.ESService;
 import com.bess.springboot.wfx.service.GoodService;
 import com.bess.springboot.wfx.util.JWTUtil;
 import com.bess.springboot.wfx.util.RandomId;
@@ -12,6 +13,7 @@ import io.jsonwebtoken.Jws;
 import io.swagger.annotations.*;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +35,9 @@ public class GoodController {
 
     @Resource
     private GoodService goodService;
+
+    @Resource
+    private ESService esService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ApiOperation(value = "商品信息查询接口" , notes = "根据商户的id查询该商户所有的商品，不分页")
@@ -245,5 +250,27 @@ public class GoodController {
             e.printStackTrace();
         }
         return new ResultVO(0,"fail","http://39.99.143.143/wfx/imgs/fail.png");
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @ApiOperation(value = "商品查询接口" , notes = "根据关键词查询商品的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "keyName", value = "查询关键字", required = true, type = "String"),
+            @ApiImplicitParam(name = "token", value = "token验证信息", required = true, type = "String")
+    })
+    public ResultVO search(String keyName,@RequestHeader(required = true) String token) {
+        Jws<Claims> jws = JWTUtil.Decrypt(token);
+        String issuer = jws.getBody().getIssuer();
+        System.out.println("issuer:" + issuer);
+        if ("memeber".equals(issuer)) {
+            SearchHits searchGood = esService.searchGood(keyName);
+            if (searchGood != null) {
+                return new ResultVO(0,"查询成功",searchGood);
+            } else {
+                return new ResultVO(1,"查询失败",null);
+            }
+        } else {
+            return new ResultVO(1, "查询失败，权限校验未通过", null);
+        }
     }
 }

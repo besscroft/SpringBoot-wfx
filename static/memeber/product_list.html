@@ -11,6 +11,12 @@
 		
 		<div id="container">
 			
+			<div style="margin-top: 15px;">
+				<el-input placeholder="请输入内容" v-model="keyName" class="input-with-select" @keyup.enter.native="submitSearch" :plain="true">
+					<el-button slot="append" icon="el-icon-search" @click="submitSearch" :plain="true"></el-button>
+				</el-input>
+			</div>
+			
 			<template>
 				<el-table :data="tableData" height="540" border style="width: 100%">
 					<el-table-column prop="goodType.typId" v-if="false"></el-table-column>
@@ -46,12 +52,9 @@
 					<el-table-column prop="sellNum" label="库存"></el-table-column>
 					<el-table-column prop="website" label="产品网址"></el-table-column>
 					<el-table-column prop="kfqq" label="客服QQ"></el-table-column>
-					<el-table-column fixed="right" width="150px" :data="filterData">
-					    <template slot="header" slot-scope="scope">
-					        <el-input v-model="search" size="mini" placeholder="输入关键字搜索"/>
-					    </template>
+					<el-table-column label="操作" fixed="right">
 					    <template slot-scope="scope">
-					        <el-button @click="handleAbout(scope.$index, scope.row)">详情</el-button>
+					        <el-button type="primary" round @click="handleAbout(scope.$index, scope.row)">详情</el-button>
 					    </template>
 					</el-table-column>
 				</el-table>
@@ -59,7 +62,7 @@
 			
 			<template>
 				<div class="block">
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+					<el-pagination :hide-on-single-page="pageValue" @size-change="handleSizeChange" @current-change="handleCurrentChange" 
 					:current-page="currentPage4" :page-sizes="[10, 20, 50, 100]" 
 					:page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="total">
 					</el-pagination>
@@ -176,7 +179,6 @@
 				dialogVisible:false,
 				rowData:[],
 				goodType:[],
-				filterData:"",
 				token:"",
 				buyerPhone:"",
 				buyNum:1,
@@ -191,7 +193,9 @@
 				city:"",
 				region:"",
 				innerVisible:false,
-				outerVisible:false
+				outerVisible:false,
+				keyName:"",
+				pageValue:true
 			},
 			beforeMount:function(res){
 				var tokenStr = "";
@@ -365,6 +369,31 @@
 					vm.dialogVisible = false;
 					vm.outerVisible = false;
 					console.log("取消了");
+				},
+				submitSearch:function(){
+					console.log("点击了");
+					console.log(vm.keyName);
+					axios({
+						method: 'post',
+						url: 'http://localhost:8080/good/search',
+						headers: {'token': vm.token},
+						params: {
+							keyName: vm.keyName
+						}
+					}).then(function(res) {
+						console.log(res);
+						if (res.data.code === 0) {
+							vm.$message('查询成功！');
+							vm.pageValue = false;
+							console.log(res.data.data.hits[0].sourceAsMap);
+							vm.rowData = res.data.data.hits[0].sourceAsMap;
+							vm.dialogVisible = true;
+							// vm.outerVisible = false;
+						}
+						// if (res.data.code === 1) {
+						// 	top.location = "../login.html";
+						// }
+					});
 				}
 			}
 		});

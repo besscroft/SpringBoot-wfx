@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,8 +21,10 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @ApiModel(value = "商品对象", description = "包含商品全部信息的对象")
-public class Good {
+@Document(indexName = "dbwfx", type = "wxbgood")
+public class Good implements Serializable {
     @ApiModelProperty(value = "商品id", dataType = "String", required = true)
+    @Id
     private String goodId;
     @ApiModelProperty(value = "商品名称", dataType = "String", required = true)
     private String goodName;
