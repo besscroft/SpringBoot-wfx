@@ -216,23 +216,23 @@ public class GoodController {
         System.out.println(fileName);
         try {
             FTPClient ftpClient = new FTPClient();
-            ftpClient.connect("39.99.143.143",21);
-            boolean state = ftpClient.login("root", "abc123...");
+            ftpClient.connect("47.100.38.50",21);
+            boolean state = ftpClient.login("springcloud", "6mLyx68jhWE8YADZ");
             int replyCode = ftpClient.getReplyCode();
             System.out.println("replyCode:"+replyCode);
             // 如果响应码在200到299之间，表示与FTP站点的连接是成功的
             if (FTPReply.isPositiveCompletion(replyCode)) {
                 // 设置编码UTF-8
                 ftpClient.setControlEncoding("UTF-8");
-                // 设置被动模式（腾讯云必须添加，其它云待测试
-                ftpClient.enterLocalPassiveMode();
+                // 设置被动模式（腾讯云必须添加，阿里云测试时不用添加，其它云待测试
+//                ftpClient.enterLocalPassiveMode();
 
                 // a.设置接受文件类型为二进制文件
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
                 // b.在服务器上创建images文件夹
                 //ftpClient.makeDirectory("images");
                 // c.切换进入到images文件夹
-                ftpClient.changeWorkingDirectory("/usr/local/webserver/nginx/resources/wfx/imgs");
+                ftpClient.changeWorkingDirectory("/www/wwwroot/upload.52bess.com/images");
                 // 将文件上传到ftp服务器
                 InputStream inputStream = file.getInputStream();
                 boolean b = ftpClient.storeFile(fileName, inputStream);
@@ -241,7 +241,7 @@ public class GoodController {
                 inputStream.close();
                 // 2.退出登录
                 ftpClient.logout();
-                return new ResultVO(0,"success","http://39.99.143.143/wfx/imgs/"+fileName);
+                return new ResultVO(0,"success","https://upload.52bess.com/images/"+fileName);
             } else {
                 System.out.println("上传失败了");
                 return new ResultVO(0,"fail","http://39.99.143.143/wfx/imgs/fail.png");
